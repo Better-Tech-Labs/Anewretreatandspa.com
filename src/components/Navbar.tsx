@@ -45,7 +45,7 @@ export default function Navbar() {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
 
-  const linkClass = `text-[11px] tracking-[0.25em] uppercase font-light transition-colors duration-300 ${
+  const linkClass = `whitespace-nowrap text-[11px] tracking-[0.25em] uppercase font-light transition-colors duration-300 ${
     useDarkText ? "text-dark" : "text-white"
   } hover:opacity-60`;
 
@@ -58,9 +58,10 @@ export default function Navbar() {
             : "bg-transparent py-6"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between relative">
+        {/* Equal side columns keep the logo centered and the links evenly spaced around it */}
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-8 xl:gap-x-12">
           {/* Left nav (desktop) */}
-          <div className="hidden lg:flex items-center gap-5 xl:gap-8">
+          <div className="col-start-1 hidden lg:flex items-center justify-end gap-5 xl:gap-8">
             {leftNavLinks.map((link) => (
               <Link key={link.label} href={link.href} className={linkClass}>
                 {link.label}
@@ -69,7 +70,7 @@ export default function Navbar() {
           </div>
 
           {/* Center logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
+          <Link href="/" className="col-start-2 flex items-center">
             <span
               className={`font-heading text-[1.7rem] xl:text-[2rem] tracking-[0.35em] transition-colors duration-500 font-light ${
                 useDarkText ? "text-dark" : "text-white"
@@ -80,7 +81,7 @@ export default function Navbar() {
           </Link>
 
           {/* Right nav (desktop) */}
-          <div className="hidden lg:flex items-center gap-3.5 xl:gap-8">
+          <div className="col-start-3 hidden lg:flex items-center gap-3.5 xl:gap-8">
             {rightNavLinks.map((link) => (
               <Link key={link.label} href={link.href} className={linkClass}>
                 {link.label}
@@ -102,10 +103,10 @@ export default function Navbar() {
               </div>
             )}
 
-            <div className="flex items-center gap-2 xl:gap-3 mr-4">
+            <div className="flex items-center gap-2 xl:gap-3 ml-auto mr-4">
               <Link
                 href="/booking"
-                className={`text-[11px] tracking-[0.25em] uppercase font-light border px-4 xl:px-5 py-2.5 transition-all duration-300 ${
+                className={`whitespace-nowrap text-[11px] tracking-[0.25em] uppercase font-light border px-4 xl:px-5 py-2.5 transition-all duration-300 ${
                   useDarkText
                     ? "border-dark text-dark hover:bg-dark hover:text-white"
                     : "border-white text-white hover:bg-white hover:text-dark"
@@ -116,14 +117,14 @@ export default function Navbar() {
               <a
                 href="tel:+12064711243"
                 aria-label="Call ANEW at (206) 471-1243"
-                className={`flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase font-light border px-3.5 xl:px-5 py-2.5 transition-all duration-300 ${
+                className={`flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase font-light border px-3.5 min-[1400px]:px-5 py-2.5 transition-all duration-300 ${
                   useDarkText
                     ? "border-dark text-dark hover:bg-dark hover:text-white"
                     : "border-white text-white hover:bg-white hover:text-dark"
                 }`}
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span className="hidden xl:inline">Call</span>
+                <span className="hidden min-[1400px]:inline">Call</span>
               </a>
             </div>
           </div>
@@ -131,7 +132,7 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`lg:hidden transition-colors ${useDarkText ? "text-dark" : "text-white"}`}
+            className={`col-start-3 justify-self-end lg:hidden transition-colors ${useDarkText ? "text-dark" : "text-white"}`}
             aria-label="Menu"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

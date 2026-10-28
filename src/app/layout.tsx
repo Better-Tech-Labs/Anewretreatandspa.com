@@ -7,6 +7,7 @@ import AuthProvider from "@/components/AuthProvider";
 import SoundEngine from "@/components/SoundEngine";
 import ScrollProgress from "@/components/ScrollProgress";
 import PageTransition from "@/components/PageTransition";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const SITE_URL = "https://anewretreatandspa.com";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </AuthProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   );

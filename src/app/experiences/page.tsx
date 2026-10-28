@@ -38,7 +38,7 @@ const experiences = [
     desc: "A full day of pampering featuring massage, facials, soaking, and relaxation in our serene woodland setting. Perfect as a bridal party treat or personal escape.",
     features: ["90-min massage treatment", "Custom facial", "Access to soaking tub", "Herbal tea & light bites"],
     price: "From $350/person",
-    image: "/images/spa-sauna.webp",
+    image: "/images/spa-sauna-anew.webp",
   },
   {
     title: "Wine Country Tour",
