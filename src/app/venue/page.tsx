@@ -10,29 +10,28 @@ import CornerAccent from "@/components/CornerAccent";
 import { useState } from "react";
 
 const spaces = [
-  { name: "Grand Hall", tag: "Indoor", capacity: "75 guests", img: "/images/interior-living-wide.webp", desc: "Refined craftsmanship at its finest — soaring timber beams, a hand-forged iron chandelier, and floor-to-ceiling windows framing the forest canopy." },
-  { name: "Courtyard & Fire Pit", tag: "Outdoor", capacity: "60 guests", img: "/images/outdoor-firepit-cabin.webp", desc: "An elegant outdoor lounge with a stone fire pit, plush seating, and twinkling string lights — exceptional for evening gatherings." },
-  { name: "Ceremony Lawn", tag: "Outdoor", capacity: "75 guests", img: "/images/exterior-wide.webp", desc: "A manicured lawn flanked by towering trees, creating a natural cathedral. An elevated setting for life's most cherished moments." },
-  { name: "Master Suite", tag: "Indoor", capacity: "Private", img: "/images/master-bedroom.webp", desc: "Reclaimed timber king bed with backlit headboard, ceiling fan, and a warm tile accent wall — the most private room in the estate." },
-  { name: "Queen Suite", tag: "Indoor", capacity: "Private", img: "/images/bedroom-master.webp", desc: "A rope-suspended queen bed that swings beneath an ornate chandelier, with vaulted ceilings and exposed beams." },
-  { name: "Bunk Room", tag: "Indoor", capacity: "4 guests", img: "/images/bunkbeds.webp", desc: "Custom-built reclaimed timber bunk beds with ladder access, plush rug, and cozy loft sleeping — perfect for groups and kids." },
-  { name: "Chef's Kitchen", tag: "Indoor", capacity: "Catering ready", img: "/images/kitchen-sink.webp", desc: "Refined craftsmanship meets function — farmhouse sink, copper fixtures, and direct courtyard access for private chefs." },
-  { name: "Spa & Wellness Center", tag: "Indoor", capacity: "By appointment", img: "/images/spa-sauna.webp", desc: "An exceptional on-site retreat featuring sauna, massage therapy, IV therapy treatments, and a private soaking tub — elevated wellness in a natural oasis." },
-  { name: "Massage & Treatment Room", tag: "Indoor", capacity: "1-2 guests", img: "/images/bathroom-shower.webp", desc: "An exclusive private treatment space for deep tissue, Swedish, and hot stone massages with licensed therapists." },
-  { name: "Event Pavilion", tag: "Indoor", capacity: "75 guests", img: "/images/event-hall.webp", desc: "A versatile open-plan hall with exposed timber beams, polished concrete floors, and French doors opening to the forest. Expandable tables available for dining, workshops, or yoga — designed for any activity you envision." },
-  { name: "Studio Cabin", tag: "Indoor/Outdoor", capacity: "Flexible", img: "/images/cabin-entrance.webp", desc: "A charming standalone cabin with tree-lined approach — ideal for breakout sessions, bridal prep, or intimate gatherings." },
+  { name: "Grand Hall", tag: "Indoor", detail: "Events & dining", img: "/images/interior-living-wide.webp", desc: "Refined craftsmanship at its finest — soaring timber beams, a hand-forged iron chandelier, and floor-to-ceiling windows framing the forest canopy." },
+  { name: "Courtyard & Fire Pit", tag: "Outdoor", detail: "Evening gatherings", img: "/images/outdoor-firepit-cabin.webp", desc: "An elegant outdoor lounge with a stone fire pit, plush seating, and twinkling string lights — exceptional for evening gatherings." },
+  { name: "Ceremony Lawn", tag: "Outdoor", detail: "Ceremonies", img: "/images/exterior-wide.webp", desc: "A manicured lawn flanked by towering trees, creating a natural cathedral. An elevated setting for life's most cherished moments." },
+  { name: "Master Suite", tag: "Indoor", detail: "Private", img: "/images/master-bedroom.webp", desc: "Reclaimed timber king bed with backlit headboard, ceiling fan, and a warm tile accent wall — the most private room in the estate." },
+  { name: "Queen Suite", tag: "Indoor", detail: "Private", img: "/images/bedroom-master.webp", desc: "A rope-suspended queen bed that swings beneath an ornate chandelier, with vaulted ceilings and exposed beams." },
+  { name: "Bunk Room", tag: "Indoor", detail: "Groups & kids", img: "/images/bunkbeds.webp", desc: "Custom-built reclaimed timber bunk beds with ladder access, plush rug, and cozy loft sleeping — perfect for groups and kids." },
+  { name: "Chef's Kitchen", tag: "Indoor", detail: "Catering ready", img: "/images/kitchen-sink.webp", desc: "Refined craftsmanship meets function — farmhouse sink, copper fixtures, and direct courtyard access for private chefs." },
+  { name: "Spa & Wellness Center", tag: "Indoor", detail: "By appointment", img: "/images/spa-sauna-anew.webp", desc: "An exceptional on-site retreat featuring sauna, massage therapy, IV therapy treatments, and a private soaking tub — elevated wellness in a natural oasis." },
+  { name: "Massage & Treatment Room", tag: "Indoor", detail: "Solo or couples", img: "/images/bathroom-shower.webp", desc: "An exclusive private treatment space for deep tissue, Swedish, and hot stone massages with licensed therapists." },
+  { name: "Event Pavilion", tag: "Indoor", detail: "Events & workshops", img: "/images/event-hall.webp", desc: "A versatile open-plan hall with exposed timber beams, polished concrete floors, and French doors opening to the forest. Expandable tables available for dining, workshops, or yoga — designed for any activity you envision." },
+  { name: "Studio Cabin", tag: "Indoor/Outdoor", detail: "Flexible", img: "/images/cabin-entrance.webp", desc: "A charming standalone cabin with tree-lined approach — ideal for breakout sessions, bridal prep, or intimate gatherings." },
 ];
 
 const faqs = [
   { q: "How far in advance should I book?", a: "We recommend 6-12 months for peak season (May-October). Off-season dates may be available with shorter notice." },
-  { q: "What is the maximum guest count?", a: "Up to 75 guests for events. The estate sleeps up to 13 overnight across 7 bedrooms." },
   { q: "Are overnight stays included?", a: "Yes — every booking includes an overnight stay. The base rate is $5,500 per night." },
-  { q: "What about parking?", a: "On-site parking for up to 20 vehicles. For larger events, we can arrange shuttle service from nearby lots." },
+  { q: "How do guests arrive?", a: "ANEW is mainly a walk-in estate. Reach out and we'll share arrival details for your stay or event." },
   { q: "Is the venue accessible?", a: "The main floor, Grand Hall, courtyard, and fire pit are all ground-level accessible. Please contact us to discuss specific accessibility needs." },
-  { q: "What if it rains?", a: "The Grand Hall and Event Pavilion seat up to 75 indoors. We can transition outdoor ceremonies inside with advance notice." },
+  { q: "What if it rains?", a: "The Grand Hall and Event Pavilion offer beautiful indoor space. We can transition outdoor ceremonies inside with advance notice." },
   { q: "What about the spa and wellness services?", a: "Our on-site spa features sauna, massage therapy, IV therapy, and soaking tub experiences. Available by appointment for guests and event attendees." },
   { q: "Can I bring my own vendors?", a: "Yes. We welcome approved outside vendors and maintain a preferred vendor list." },
-  { q: "What's included in the base price?", a: "Every booking includes the venue, overnight stay, basic setup (tables and chairs), parking, and access to all indoor and outdoor spaces. Catering, photography, and florals are available as add-ons." },
+  { q: "What's included in the base price?", a: "Every booking includes the venue, overnight stay, basic setup (tables and chairs), and access to all indoor and outdoor spaces. Catering, photography, and florals are available as add-ons." },
   { q: "Booking policy?", a: "Reservations require a minimum of 3 days advance notice. All bookings are paid in full at checkout and are non-refundable." },
   { q: "Setup and cleanup?", a: "2-4 hour setup windows included. Cleanup package available for $350." },
   { q: "Noise restrictions?", a: "Amplified music until 10 PM. Acoustic music and conversation may continue." },
@@ -134,7 +133,7 @@ export default function VenuePage() {
           </AnimatedSection>
           <AnimatedSection direction="right" className="order-1 lg:order-2">
             <div className="relative aspect-[4/5] lg:aspect-[3/4] max-h-[700px]">
-              <Image src="/images/spa-sauna.webp" alt="ANEW Spa & Sauna" fill className="object-cover" />
+              <Image src="/images/spa-sauna-anew.webp" alt="ANEW Spa & Sauna" fill className="object-cover" />
             </div>
           </AnimatedSection>
         </div>
@@ -205,7 +204,7 @@ export default function VenuePage() {
                   </div>
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="font-heading text-xl text-dark">{space.name}</h4>
-                    <span className="text-[11px] text-muted">{space.capacity}</span>
+                    <span className="text-[11px] text-muted">{space.detail}</span>
                   </div>
                   <p className="text-sm text-muted leading-relaxed">{space.desc}</p>
                 </div>

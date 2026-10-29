@@ -10,7 +10,6 @@ import AnimatedSection from "@/components/AnimatedSection";
 const packages = [
   {
     name: "The Celebration",
-    price: "From $8,000",
     tagline: "Wedding day venue rental",
     duration: "Wedding day",
     includes: [
@@ -27,7 +26,6 @@ const packages = [
   },
   {
     name: "The Estate Weekend",
-    price: "From $21,000",
     tagline: "Wedding celebration + two-night stay",
     duration: "Two nights",
     includes: [
@@ -44,7 +42,6 @@ const packages = [
   },
   {
     name: "The ANEW Signature Weekend",
-    price: "From $45,000",
     tagline: "Elevated all-inclusive wedding weekend",
     duration: "Two nights",
     featured: true,
@@ -74,7 +71,7 @@ const enhancements = [
   "Shuttle / transportation coordination",
 ];
 
-const pricingFaqs = [
+const faqs = [
   {
     q: "How do I reserve my date?",
     a: "Packages are customized based on event date, guest count, spaces used, accommodations, food and beverage, and selected services. A signed agreement and retainer are required to reserve your date.",
@@ -122,6 +119,7 @@ export default function PackagesPage() {
               indoor and outdoor spaces, overnight accommodations, and the option to build a wedding weekend
               around your vision.
             </p>
+            <p className="text-[11px] tracking-[0.3em] uppercase text-accent mt-6">Pricing available by inquiry</p>
           </AnimatedSection>
 
           <div className="space-y-0">
@@ -139,10 +137,7 @@ export default function PackagesPage() {
                         <span className="text-[9px] tracking-[0.2em] uppercase bg-accent text-white px-2.5 py-1">Popular</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-6">
-                      <span className="font-heading text-2xl text-dark">{pkg.price}</span>
-                      <ChevronDown className={`w-4 h-4 text-muted transition-transform duration-300 ${expandedPkg === i ? "rotate-180" : ""}`} />
-                    </div>
+                    <ChevronDown className={`w-4 h-4 text-muted shrink-0 transition-transform duration-300 ${expandedPkg === i ? "rotate-180" : ""}`} />
                   </button>
 
                   {/* Expanded content */}
@@ -214,11 +209,11 @@ export default function PackagesPage() {
       <section className="py-28 sm:py-36 px-6">
         <div className="max-w-2xl mx-auto">
           <AnimatedSection className="text-center mb-14">
-            <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Pricing</p>
+            <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Planning</p>
             <h2 className="font-heading text-3xl sm:text-4xl text-dark font-normal">Questions</h2>
           </AnimatedSection>
           <div className="space-y-0">
-            {pricingFaqs.map((faq, i) => (
+            {faqs.map((faq, i) => (
               <div key={i} className="border-b border-border">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
