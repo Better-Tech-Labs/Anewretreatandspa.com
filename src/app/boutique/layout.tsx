@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Boutique | ANEW",
+export const metadata = pageMeta({
+  title: "Boutique | ANEW Retreat & Spa",
   description:
-    "Shop the ANEW boutique for curated goods, gifts, and keepsakes inspired by the Pacific Northwest.",
-  robots: { index: false, follow: false },
-};
+    "Curated goods, gifts and keepsakes from ANEW Retreat & Spa.",
+  path: "/boutique",
+  noindex: true,
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Things To Do | ANEW",
+export const metadata = pageMeta({
+  title: "Things To Do near Kenmore & Woodinville, WA | ANEW Retreat & Spa",
   description:
-    "Explore local attractions, dining, and activities near ANEW in Kenmore, WA and the greater Pacific Northwest.",
-};
+    "Wineries, trails, dining and day trips near ANEW in Kenmore, WA, from Woodinville Wine Country to Snoqualmie Falls.",
+  path: "/local",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;
