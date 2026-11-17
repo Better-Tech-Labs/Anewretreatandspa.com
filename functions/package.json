@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "firebase-admin": "^13.9.0",
+    "firebase-admin": "^14.5.1",
     "firebase-functions": "^7.2.5",
     "stripe": "^19.2.0"
   },
