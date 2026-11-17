@@ -12,7 +12,7 @@ import HandDrawnDivider from "@/components/HandDrawnDivider";
 import CornerAccent from "@/components/CornerAccent";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import { useBotGuard } from "@/components/BotGuard";
-import { track } from "@/lib/analytics";
+import { trackLead } from "@/lib/analytics";
 
 const FUNCTIONS_URL =
   process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
@@ -57,7 +57,7 @@ export default function HomePage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
-      track("tour_request_submit");
+      trackLead("tour_form");
       setTourSubmitted(true);
     } catch (err) {
       console.error(err);

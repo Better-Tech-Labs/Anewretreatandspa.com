@@ -62,3 +62,28 @@ export function track(eventName: string, params: TrackParams = {}): void {
     // Analytics must never break the page.
   }
 }
+
+// ----------------------------------------------------------------------------
+// Conversions. Only generate_lead and purchase should be GA4 key events.
+// They fire after the server (or Stripe) confirms, never on page load or click.
+// ----------------------------------------------------------------------------
+
+const CURRENCY = "USD";
+
+/** Which form produced the lead. Register `lead_source` as a GA4 custom dimension. */
+export type LeadSource = "inquiry_form" | "tour_form";
+
+/** Key event: a lead the backend accepted. */
+export function trackLead(leadSource: LeadSource, eventType?: EventType): void {
+  track("generate_lead", { lead_source: leadSource, event_type: eventType });
+}
+
+/** Funnel step, not a key event: the visitor reached payment with a priced booking. */
+export function trackBeginCheckout(value: number, eventType?: EventType): void {
+  track("begin_checkout", { value, currency: CURRENCY, event_type: eventType });
+}
+
+/** Key event: Stripe confirmed the booking payment. */
+export function trackBookingPaid(transactionId: string, value: number, eventType?: EventType): void {
+  track("purchase", { transaction_id: transactionId, value, currency: CURRENCY, event_type: eventType });
+}

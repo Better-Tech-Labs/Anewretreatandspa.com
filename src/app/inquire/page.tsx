@@ -9,7 +9,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import { useBotGuard } from "@/components/BotGuard";
 import { EVENT_TYPES } from "@/lib/booking";
-import { eventTypeFromForm, track } from "@/lib/analytics";
+import { eventTypeFromForm, trackLead } from "@/lib/analytics";
 
 const FUNCTIONS_URL =
   process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
@@ -59,7 +59,7 @@ export default function InquirePage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
-      track("inquiry_form_submit", { event_type: eventTypeFromForm(form.eventType) });
+      trackLead("inquiry_form", eventTypeFromForm(form.eventType));
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Submission failed");
