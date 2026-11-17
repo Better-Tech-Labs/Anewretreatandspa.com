@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Experiences | ANEW",
+export const metadata = pageMeta({
+  title: "Retreat Experiences: Spa, Private Chef & Wellness | ANEW, Kenmore WA",
   description:
-    "Discover curated experiences at ANEW, from wellness retreats and chef-led dinners to corporate escapes in the Pacific Northwest.",
-};
+    "Wellness retreats, private chef dinners, contrast therapy, Woodinville wine tours and fireside evenings at ANEW, a private estate minutes from Seattle.",
+  path: "/experiences",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

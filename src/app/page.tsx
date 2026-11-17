@@ -12,6 +12,7 @@ import HandDrawnDivider from "@/components/HandDrawnDivider";
 import CornerAccent from "@/components/CornerAccent";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import { useBotGuard } from "@/components/BotGuard";
+import { track } from "@/lib/analytics";
 
 const FUNCTIONS_URL =
   process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
@@ -56,6 +57,7 @@ export default function HomePage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
+      track("tour_request_submit");
       setTourSubmitted(true);
     } catch (err) {
       console.error(err);
@@ -68,7 +70,7 @@ export default function HomePage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden ken-burns">
+      <section data-track-section="hero" className="relative h-screen flex items-center justify-center overflow-hidden ken-burns">
         <Image
           src="/images/exterior-hero.webp"
           alt="ANEW"
@@ -149,7 +151,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== INTRO ===== */}
-      <section className="pt-12 pb-20 sm:pt-16 sm:pb-28 px-6">
+      <section data-track-section="intro" className="pt-12 pb-20 sm:pt-16 sm:pb-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedSection>
             <HandDrawnDivider variant="botanical" className="mb-10" />
@@ -180,7 +182,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== TWO-COL: Image Left / Text Right ===== */}
-      <section className="px-6 pb-32 sm:pb-44">
+      <section data-track-section="the_estate" className="px-6 pb-32 sm:pb-44">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-6 lg:gap-0 items-center">
           <AnimatedSection direction="left">
             <Tilt3D className="relative aspect-[4/5] lg:aspect-[3/4] max-h-[700px] overflow-hidden">
@@ -232,7 +234,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== TWO-COL: Text Left / Image Right ===== */}
-      <section className="py-28 sm:py-36 px-6">
+      <section data-track-section="gather" className="py-28 sm:py-36 px-6">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-6 lg:gap-0 items-center">
           <AnimatedSection direction="left" className="lg:pr-20 xl:pr-28 order-2 lg:order-1">
             <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Gather</p>
@@ -266,7 +268,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== ROOMS SLIDER ===== */}
-      <section id="events" className="py-28 sm:py-36 bg-cream relative overflow-hidden">
+      <section data-track-section="stay" id="events" className="py-28 sm:py-36 bg-cream relative overflow-hidden">
         <CornerAccent position="top-right" />
         <CornerAccent position="bottom-left" />
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
@@ -333,7 +335,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== TWO-COL: Dining ===== */}
-      <section className="py-28 sm:py-36 px-6">
+      <section data-track-section="dine" data-event-type="dining" className="py-28 sm:py-36 px-6">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-6 lg:gap-0 items-center">
           <AnimatedSection direction="left">
             <Tilt3D className="relative aspect-[4/5] max-h-[600px] overflow-hidden">
@@ -375,7 +377,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== THREE-COL EVENT CARDS ===== */}
-      <section className="py-28 sm:py-36 bg-cream px-6 relative overflow-hidden">
+      <section data-track-section="group_and_gather" className="py-28 sm:py-36 bg-cream px-6 relative overflow-hidden">
         <CornerAccent position="top-left" variant="watercolor" />
         <CornerAccent position="top-right" variant="watercolor" />
         <CornerAccent position="bottom-left" />
@@ -421,7 +423,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== AVAILABILITY ===== */}
-      <section className="py-28 sm:py-36 px-6">
+      <section data-track-section="availability" className="py-28 sm:py-36 px-6">
         <div className="max-w-3xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Availability</p>
@@ -449,7 +451,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== GALLERY — Editorial masonry layout ===== */}
-      <section className="py-36 sm:py-48 px-6">
+      <section data-track-section="gallery" className="py-36 sm:py-48 px-6">
         <div className="max-w-[1400px] mx-auto">
           <AnimatedSection className="text-center mb-20">
             <HandDrawnDivider variant="ivy" className="mb-8" />
@@ -505,7 +507,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== FINAL CTA ===== */}
-      <section className="relative h-[70vh] min-h-[450px] flex items-center justify-center ken-burns overflow-hidden">
+      <section data-track-section="begin_your_story" className="relative h-[70vh] min-h-[450px] flex items-center justify-center ken-burns overflow-hidden">
         <Image
           src="/images/forest-view.webp"
           alt="ANEW"
@@ -541,7 +543,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CONTACT ===== */}
-      <section id="contact" className="py-28 sm:py-36 px-6">
+      <section data-track-section="visit" id="contact" className="py-28 sm:py-36 px-6">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <AnimatedSection direction="left">
             <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Visit</p>

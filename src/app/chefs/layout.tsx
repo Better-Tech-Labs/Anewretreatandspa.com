@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Our Chefs | ANEW",
+export const metadata = pageMeta({
+  title: "Private Chefs & Catering | ANEW Retreat & Spa, Kenmore WA",
   description:
-    "Meet the talented chefs behind ANEW's culinary experiences, crafting seasonal Pacific Northwest cuisine for your event.",
-};
+    "Meet the resident chefs at ANEW. Seasonal Pacific Northwest menus for weddings, corporate retreats and private dinners at our Kenmore estate.",
+  path: "/chefs",
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;
