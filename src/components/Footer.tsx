@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { track } from "@/lib/analytics";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -11,6 +12,8 @@ export default function Footer() {
     e.preventDefault();
     if (!email) return;
     // For now, just show success — can wire to Firebase or Mailchimp later
+    // No backend yet, so this counts the signup attempt, not a stored subscriber.
+    track("newsletter_signup", { cta_location: "footer" });
     setSubscribed(true);
   };
 

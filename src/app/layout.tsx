@@ -8,6 +8,8 @@ import SoundEngine from "@/components/SoundEngine";
 import ScrollProgress from "@/components/ScrollProgress";
 import PageTransition from "@/components/PageTransition";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import AnalyticsListeners from "@/components/AnalyticsListeners";
+import MicrosoftClarity from "@/components/MicrosoftClarity";
 import { SITE_URL, pageMeta } from "@/lib/seo";
 
 
@@ -54,6 +56,8 @@ export default function RootLayout({
           <Footer />
         </AuthProvider>
         <GoogleAnalytics />
+        <AnalyticsListeners />
+        <MicrosoftClarity />
       </body>
     </html>
   );

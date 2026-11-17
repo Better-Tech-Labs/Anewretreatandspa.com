@@ -8,6 +8,7 @@ import {
   type DayStatus,
   getAvailability,
 } from "@/lib/hospitable";
+import { track } from "@/lib/analytics";
 
 /** Format a Date as yyyy-mm-dd in local time (timezone-safe). */
 function dateKeyFor(year: number, month: number, day: number): string {
@@ -163,6 +164,7 @@ export default function AvailabilityCalendar({
     if (status === "past" || status === "booked") return;
     const picked = new Date(dateKey + "T00:00:00");
     if (picked < minBookingDate) return; // enforce 3-day lead time
+    track("calendar_date_click", { date_status: status });
     onSelectDate(picked);
   };
 
