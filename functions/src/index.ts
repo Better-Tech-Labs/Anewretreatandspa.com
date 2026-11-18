@@ -15,9 +15,10 @@ const hospitablePropertyId = defineString("HOSPITABLE_PROPERTY_ID");
 const hospitableWebhookSecret = defineString("HOSPITABLE_WEBHOOK_SECRET");
 const hospitableWebhookToken = defineString("HOSPITABLE_WEBHOOK_TOKEN");
 const hospitableAccountEmail = defineString("HOSPITABLE_ACCOUNT_EMAIL");
-// reCAPTCHA v3 secret. Empty (the default) skips the check, so deploys don't
-// block before keys exist; rate limiting + honeypot still apply.
-const recaptchaSecretKey = defineString("RECAPTCHA_SECRET_KEY", { default: "" });
+// reCAPTCHA v3 secret from functions/.env (RECAPTCHA_SECRET_KEY=...). Read from
+// process.env rather than defineString: an unset param makes non-interactive
+// deploys fail. Unset skips the check; rate limiting + honeypot still apply.
+const recaptchaSecretKey = (): string => (process.env.RECAPTCHA_SECRET_KEY || "").trim();
 
 // Hospitable's public webhook source range — published in their SDK docs.
 // All real webhook calls come from this /24.
@@ -1110,7 +1111,7 @@ export const submitBookingInquiry = onRequest((req, res) => {
         return;
       }
 
-      const captcha = await verifyRecaptcha(body.captchaToken, recaptchaSecretKey.value(), INQUIRY_CAPTCHA_ACTION, ip);
+      const captcha = await verifyRecaptcha(body.captchaToken, recaptchaSecretKey(), INQUIRY_CAPTCHA_ACTION, ip);
       if (!captcha.ok) {
         console.warn("submitBookingInquiry captcha rejected:", captcha.status, captcha.reason);
         res.status(403).json({ error: "We couldn't confirm you're not a bot. Please try again, or give us a call." });
