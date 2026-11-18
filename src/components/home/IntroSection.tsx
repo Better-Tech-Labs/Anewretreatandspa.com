@@ -23,7 +23,8 @@ export default function IntroSection({ content, trackName }: { content: IntroCon
           <div className="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3 text-[10px] sm:text-[11px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-muted">
             {content.features.map((feature, i) => (
               <Fragment key={feature}>
-                {i > 0 && <span className="text-accent">·</span>}
+                {/* Dots only where the list sits on wide rows; on phones they end up dangling at line ends. */}
+                {i > 0 && <span className="hidden sm:inline text-accent">·</span>}
                 <span>{feature}</span>
               </Fragment>
             ))}

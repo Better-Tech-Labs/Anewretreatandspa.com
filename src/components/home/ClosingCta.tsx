@@ -22,7 +22,7 @@ export default function ClosingCta({ content, trackName }: { content: ClosingCta
       data-track-section={trackName}
       className="relative h-[70vh] min-h-[450px] flex items-center justify-center ken-burns overflow-hidden"
     >
-      <Image src={content.image.src} alt={content.image.alt} fill className="object-cover" />
+      <Image src={content.image.src} alt={content.image.alt} fill sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-black/55" />
       <div className="relative z-10 text-center text-white px-6 max-w-3xl">
         <AnimatedSection>

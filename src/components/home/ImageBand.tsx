@@ -21,7 +21,7 @@ const TITLE_CLASS = "font-heading text-3xl sm:text-4xl md:text-5xl font-normal";
 export default function ImageBand({ content, heightClassName = "h-[60vh] min-h-[400px]" }: ImageBandProps) {
   return (
     <section className={`relative ${heightClassName} ken-burns overflow-hidden`}>
-      <Image src={content.image.src} alt={content.image.alt} fill className="object-cover" />
+      <Image src={content.image.src} alt={content.image.alt} fill sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 flex items-center justify-center">
         <AnimatedSection>

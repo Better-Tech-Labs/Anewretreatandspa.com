@@ -48,6 +48,7 @@ export default function SplitFeature({
           src={content.image.src}
           alt={content.image.alt}
           fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
           className="object-cover"
           style={content.image.position ? { objectPosition: content.image.position } : undefined}
         />

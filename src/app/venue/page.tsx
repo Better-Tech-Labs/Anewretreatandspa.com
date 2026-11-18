@@ -60,7 +60,7 @@ export default function VenuePage() {
       <section className="py-28 sm:py-36 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedSection>
-            <div className="flex justify-center gap-16 mb-12">
+            <div className="flex justify-center gap-6 sm:gap-16 mb-12">
               <div>
                 <span className="font-heading text-4xl text-dark">7</span>
                 <p className="text-[11px] tracking-[0.3em] uppercase text-muted mt-1">Bedrooms</p>

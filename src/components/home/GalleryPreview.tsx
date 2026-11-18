@@ -50,6 +50,7 @@ export default function GalleryPreview({ content, trackName }: { content: Galler
                   src={tile.src}
                   alt={tile.alt}
                   fill
+                  sizes="50vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-500" />
