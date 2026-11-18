@@ -122,7 +122,7 @@ export const spa: SplitFeatureContent = {
   titleLines: ["Treatments Here,", "Not Across Town"],
   paragraphs: [
     "Licensed therapists give deep tissue, Swedish and hot stone massage in the treatment room, solo or in pairs. Facials can be booked too. Tell us how many people want a treatment and we'll build a rotation so nobody spends the afternoon waiting.",
-    "Between appointments there is the cedar sauna, the cold plunge and the soaking tub. If the group would like an outing, Woodinville Wine Country is close by, and we can arrange private tastings and transportation.",
+    "Between appointments there is the cedar sauna, the cold plunge and the soaking tub. If the group would like an outing of its own, Woodinville wine country is close by.",
   ],
   actions: [
     { kind: "link", label: "View Spa Experiences", href: "/experiences" },
@@ -188,7 +188,7 @@ export const faq: FaqContent = {
     { q: "Will other guests be at the estate during our stay?", a: "No. ANEW is booked by one group at a time, so the house, the spa and the grounds are yours for the stay." },
     { q: "How do spa treatments work for a group?", a: "Massage, facials and IV therapy are by appointment. Tell us how many people would like a treatment and which ones, and we'll schedule them in turns while the rest of the group uses the sauna, cold plunge and soaking tub." },
     { q: "Do we have to plan the whole weekend ourselves?", a: "No. Tell us what the bride likes and we'll help arrange the chef, spa appointments and activities. You can also book the estate and keep the plan loose." },
-    { q: "What can we do besides the spa?", a: "Flower arranging workshops, guided art sessions, hand-building classes and cooking classes can be arranged. There are also lawn and table games on hand, including bocce, badminton and ping pong, and wine tasting nearby in Woodinville." },
+    { q: "What can we do besides the spa?", a: "Flower arranging workshops, guided art sessions, hand-building classes and cooking classes can be arranged. There are also lawn and table games on hand, including bocce, badminton and ping pong." },
     { q: "Can we bring our own photographer, decorator or other vendors?", a: "Outside vendors are welcome once they're approved ahead of the event, and they need to carry their own liability insurance. We also keep a preferred vendor list you can ask for." },
     { q: "How far ahead should we book a bachelorette weekend?", a: "For May through October we suggest booking 6 to 12 months ahead. Other months often have dates on shorter notice. Reservations need at least 3 days' notice." },
   ],

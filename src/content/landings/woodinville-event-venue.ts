@@ -98,7 +98,7 @@ export const spaces: RoomsContent = {
 export const day: SampleDayContent = {
   eyebrow: "A Wine Country Saturday",
   title: "Tasting Rooms by Day, the Estate by Night",
-  text: "One way a Saturday can go when your group is staying at ANEW and spending the afternoon in Woodinville. Arrange transport for the tasting part of the day ahead of time.",
+  text: "One way a Saturday can go when your group is staying at ANEW and spending the afternoon in Woodinville. The tasting day is yours to plan: ANEW does not run wine tours, so book your own tastings and transport ahead of time.",
   action: { kind: "link", label: "Plan a Weekend Like This", href: INQUIRE_HREF },
   items: [
     { time: "9:30", title: "A slow start", detail: "Coffee in the Grand Hall and a walk along the stream before anyone has to be anywhere." },
@@ -117,7 +117,7 @@ export const aroundTown: SplitFeatureContent = {
   paragraphs: [
     "Woodinville wine country is organized into four districts: Hollywood, the Warehouse District, West Valley and Downtown. Each has its own feel, so it is worth choosing one for the day instead of trying to cover them all.",
     "For a morning without a glass in hand, the Sammamish River Trail is a paved King County trail that follows the river from Bothell through Woodinville and on to Redmond. People walk it, run it and ride it.",
-    "Then plan the estate part. Book massages for the day after, or ask about the wine country outing on our Experiences page. We will help you shape the weekend around whatever you have booked in town.",
+    "Then plan the estate part. Book massages for the day after, and tell us what you have booked in town so meals and spa time fit around it.",
   ],
   actions: [
     { kind: "link", label: "See the Local Guide", href: "/local" },
@@ -149,7 +149,7 @@ export const faq: FaqContent = {
   faqs: [
     { q: "Is ANEW in Woodinville?", a: "No. ANEW is in Kenmore, at the north end of Lake Washington. Bothell sits to the east of Kenmore and Woodinville lies beyond Bothell. We send arrival details once you book." },
     { q: "Can we stay at ANEW and spend a day wine tasting in Woodinville?", a: "Yes, a weekend can be planned that way. Stay at the estate, spend an afternoon in the tasting-room districts, and come back for dinner and the fire pit." },
-    { q: "Do you provide transportation to the tasting rooms?", a: "Ask us when you inquire. Arrange transport for a tasting day before the weekend, and tell us your timing so meals and spa appointments can be planned around it." },
+    { q: "Does ANEW arrange wine tours or transport to the tasting rooms?", a: "No. ANEW does not run wine tours, arrange tastings or provide transport. Plan and book the tasting day yourselves, and tell us your timing so meals and spa appointments can be planned around it." },
     { q: "Can we hold the event at ANEW itself instead of in Woodinville?", a: "Yes. The estate hosts weddings, dinners, birthdays, reunions and retreats on the property. Indoors there is the Grand Hall and the Event Pavilion, and outdoors the Ceremony Lawn and the courtyard." },
     { q: "Who cooks if we eat at the estate?", a: "Resident chefs cook in the estate kitchen, and menus follow the season. Approved outside caterers are welcome too. Mention allergies when you inquire." },
     { q: "How do we find out if our dates and group size work?", a: "Send the dates and a rough headcount through the inquiry form, or call. A person replies within 24 hours and tells you plainly whether the estate fits." },

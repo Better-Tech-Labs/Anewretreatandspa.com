@@ -176,7 +176,7 @@ export const faq: FaqContent = {
     { q: "Can we book the estate for only the two of us?", a: "Yes. Some couples come alone for a private stay with dinner and spa time. Message us with your dates and we'll confirm what is available." },
     { q: "Is the estate manageable for older relatives?", a: "The main floor, the Grand Hall, the courtyard and the fire pit are all at ground level. Please tell us about any specific accessibility needs so we can talk them through before you book." },
     { q: "Can a chef cook our anniversary dinner?", a: "Yes. Resident chefs cook on site, subject to their availability, so ask early. Share any dietary needs when you book. You may also bring an approved outside caterer." },
-    { q: "What is there for the family to do besides dinner?", a: "Chess, bocce ball, basketball, soccer, badminton, ping pong and board games are on hand. There are garden paths and a stream to walk, a fire pit for the evening, and we can arrange private tastings in nearby Woodinville wine country." },
+    { q: "What is there for the family to do besides dinner?", a: "Chess, bocce ball, basketball, soccer, badminton, ping pong and board games are on hand. There are garden paths and a stream to walk and a fire pit for the evening." },
     { q: "How do we find out what it costs?", a: "Pricing depends on your date, the size of your group and what you add. Send those details through the inquiry form and we'll reply with options." },
   ],
 };

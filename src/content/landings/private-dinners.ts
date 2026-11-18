@@ -89,7 +89,7 @@ export const spaces: RoomsContent = {
     { img: "/images/dining-room-leather.webp", alt: "Stone-topped dining table with leather chairs and a view to the garden at ANEW", name: "Dining Room", desc: "The classic choice. One table under the beams, close enough to the kitchen that plates arrive hot." },
     { img: "/images/interior-openplan.webp", alt: "Fireplace and sofas under an iron chandelier in the Grand Hall at ANEW", name: "Grand Hall", desc: "Timber beams, a hand-forged chandelier and a fireplace. Set a table here for a larger party, or use it for coffee after dessert." },
     { img: "/images/kitchen-sink.webp", alt: "Farmhouse sink under kitchen windows that look out to the courtyard at ANEW", name: "Chef's Kitchen", desc: "Where the cooking happens, with a farmhouse sink, copper fixtures and a door straight to the courtyard. Guests tend to wander in to watch." },
-    { img: "/images/courtyard-firepit.webp", alt: "Fire pit and lounge seating in front of the timber estate at ANEW", name: "Courtyard & Fire Pit", desc: "Arrival and the first drink, around the fire under string lights. On a warm evening, dinner can be served out here." },
+    { img: "/images/courtyard-firepit.webp", alt: "Fire pit and lounge seating in front of the timber estate at ANEW", name: "Courtyard & Fire Pit", desc: "Arrival, around the fire under string lights. On a warm evening, dinner can be served out here." },
     { img: "/images/event-hall.webp", alt: "Open hall with timber beams, a concrete floor and French doors at ANEW", name: "Event Pavilion", desc: "For a rehearsal dinner or a bigger guest list. An open hall with expandable tables and French doors onto the forest." },
     { img: "/images/maple-uplit-night.webp", alt: "Japanese maple and a garden path lit up at night at ANEW", name: "Garden Paths", desc: "A short walk between courses. Stone paths through cedars and ferns, for guests who want some air before dessert." },
   ],
@@ -102,7 +102,7 @@ export const sampleDay: SampleDayContent = {
   action: { kind: "link", label: "Plan Your Dinner", href: INQUIRE_HREF },
   items: [
     { time: "5:30", title: "Guests arrive", detail: "Into the courtyard, where the fire is already lit." },
-    { time: "6:00", title: "A drink by the fire", detail: "Introductions outside while the kitchen finishes the first course." },
+    { time: "6:00", title: "Around the fire", detail: "Introductions outside while the kitchen finishes the first course." },
     { time: "6:45", title: "To the table", detail: "Everyone moves inside and finds a seat under the beams." },
     { time: "7:00", title: "First courses", detail: "Seasonal starters, plated and brought out together." },
     { time: "7:45", title: "The main course", detail: "Plated or passed family style, whichever suits your group." },

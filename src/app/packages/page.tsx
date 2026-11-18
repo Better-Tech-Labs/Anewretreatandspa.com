@@ -64,7 +64,6 @@ const packages = [
 const enhancements = [
   "Additional overnight accommodations / extra nights",
   "Resident-chef catering and custom menus",
-  "Bar service",
   "Wedding planning or expanded coordination",
   "Tables, chairs, linens, and specialty event rentals",
   "Setup and cleanup",
@@ -87,7 +86,7 @@ const faqs = [
   },
   {
     q: "What enhancements are available?",
-    a: "Extra nights, resident-chef catering, bar service, wedding planning and coordination, event rentals, setup and cleanup, rehearsal dinners, welcome gatherings, farewell brunches, and shuttle coordination.",
+    a: "Extra nights, resident-chef catering, wedding planning and coordination, event rentals, setup and cleanup, rehearsal dinners, welcome gatherings, farewell brunches, and shuttle coordination.",
   },
 ];
 
