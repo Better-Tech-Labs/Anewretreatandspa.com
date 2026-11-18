@@ -379,3 +379,10 @@ section + section {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== reCAPTCHA v3 =====
+   The floating badge is hidden; the inquiry form shows Google's required
+   "Protected by reCAPTCHA" notice in its place. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

@@ -3,6 +3,7 @@ import { defineString } from "firebase-functions/params";
 import * as admin from "firebase-admin";
 import Stripe from "stripe";
 import cors from "cors";
+import { verifyRecaptcha } from "./recaptcha";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -14,6 +15,9 @@ const hospitablePropertyId = defineString("HOSPITABLE_PROPERTY_ID");
 const hospitableWebhookSecret = defineString("HOSPITABLE_WEBHOOK_SECRET");
 const hospitableWebhookToken = defineString("HOSPITABLE_WEBHOOK_TOKEN");
 const hospitableAccountEmail = defineString("HOSPITABLE_ACCOUNT_EMAIL");
+// reCAPTCHA v3 secret. Empty (the default) skips the check, so deploys don't
+// block before keys exist; rate limiting + honeypot still apply.
+const recaptchaSecretKey = defineString("RECAPTCHA_SECRET_KEY", { default: "" });
 
 // Hospitable's public webhook source range — published in their SDK docs.
 // All real webhook calls come from this /24.
@@ -1081,7 +1085,10 @@ interface InquiryPayload {
   eventType?: string;
   message?: string;
   honeypot?: string;
+  captchaToken?: string;
 }
+
+const INQUIRY_CAPTCHA_ACTION = "inquiry";
 
 export const submitBookingInquiry = onRequest((req, res) => {
   corsHandler(req, res, async () => {
@@ -1100,6 +1107,13 @@ export const submitBookingInquiry = onRequest((req, res) => {
       const body = (req.body || {}) as InquiryPayload;
       if (body.honeypot) {
         res.status(200).json({ success: true });
+        return;
+      }
+
+      const captcha = await verifyRecaptcha(body.captchaToken, recaptchaSecretKey.value(), INQUIRY_CAPTCHA_ACTION, ip);
+      if (!captcha.ok) {
+        console.warn("submitBookingInquiry captcha rejected:", captcha.status, captcha.reason);
+        res.status(403).json({ error: "We couldn't confirm you're not a bot. Please try again, or give us a call." });
         return;
       }
 
@@ -1148,6 +1162,9 @@ export const submitBookingInquiry = onRequest((req, res) => {
         message,
         type: "booking_inquiry",
         status: "new",
+        // skipped | passed | unverified, so spam can be traced once keys are live.
+        captcha: captcha.status,
+        captchaScore: captcha.status === "passed" ? captcha.score : null,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
 

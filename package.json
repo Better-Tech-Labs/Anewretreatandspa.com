@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test \"src/**/*.test.ts\""
+    "test": "node --test \"src/**/*.test.ts\" \"functions/test/*.test.ts\""
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^5.6.1",

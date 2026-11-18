@@ -1,261 +1,161 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
-import AnimatedSection from "@/components/AnimatedSection";
+import Script from "next/script";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
-import { useBotGuard } from "@/components/BotGuard";
-import { EVENT_TYPES } from "@/lib/booking";
 import { eventTypeFromForm, trackLead } from "@/lib/analytics";
-import { eventTypeFromQuery } from "@/lib/inquire";
+import { dateBounds, eventTypeFromQuery, validateInquiry, type InquiryErrors, type InquiryFields } from "@/lib/inquire";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/contact";
+import { RECAPTCHA_ENABLED, RECAPTCHA_SCRIPT_SRC } from "@/lib/recaptcha";
+import { Field, MessageField } from "./Field";
+import InquirySent from "./InquirySent";
+import { submitInquiry, type InquiryDraft } from "./submitInquiry";
 
-const FUNCTIONS_URL =
-  process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
-  "https://us-central1-bakkers-website-847ba.cloudfunctions.net";
+const EMPTY_DRAFT: InquiryDraft = { name: "", email: "", phone: "", date: "", message: "" };
+/** Order the visitor sees the fields in, so the first problem gets focus. */
+const FIELD_ORDER: (keyof InquiryFields)[] = ["name", "email", "phone", "date"];
+const fieldId = (key: keyof InquiryDraft) => `inquiry-${key}`;
 
-// The query string can't change while this page is mounted without a re-render,
-// so there is nothing to subscribe to. The server snapshot is "" (static export).
+// Browser-only values (query string, today's date) read without a hydration
+// mismatch: the static export renders with the server snapshot, then updates.
 const subscribeToNothing = () => () => {};
 const readSearch = () => window.location.search;
-const serverSearch = () => "";
+const readBounds = () => {
+  const { min, max } = dateBounds(new Date());
+  return `${min}|${max}`;
+};
+const onServer = () => "";
+
+const LINK = "text-dark border-b border-dark/40 hover:text-accent hover:border-accent transition-colors";
 
 export default function InquirePage() {
-  const bot = useBotGuard();
-  const search = useSyncExternalStore(subscribeToNothing, readSearch, serverSearch);
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    date: "",
-    guestCount: 10,
-    // null until the visitor picks one; until then ?type= from the link decides.
-    eventType: null as string | null,
-    message: "",
-  });
-  const eventType = form.eventType ?? eventTypeFromQuery(search);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const eventType = eventTypeFromQuery(useSyncExternalStore(subscribeToNothing, readSearch, onServer));
+  const [minDate, maxDate] = useSyncExternalStore(subscribeToNothing, readBounds, onServer).split("|");
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
-  const update = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
-    setForm((p) => ({ ...p, [k]: v }));
+  const [draft, setDraft] = useState<InquiryDraft>(EMPTY_DRAFT);
+  const [errors, setErrors] = useState<InquiryErrors>({});
+  const [attempted, setAttempted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [sentName, setSentName] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // After the first send attempt, re-check as they type so errors clear on fix.
+  const update = (key: keyof InquiryDraft) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const next = { ...draft, [key]: e.target.value };
+    setDraft(next);
+    if (attempted) setErrors(validateInquiry(next, new Date()));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
-    if (!form.firstName.trim() || !form.email.trim() || !form.date.trim()) {
-      setError("Name, email, and a target date are required.");
+    const found = validateInquiry(draft, new Date());
+    setAttempted(true);
+    setErrors(found);
+    setSendError(null);
+    const firstProblem = FIELD_ORDER.find((key) => found[key]);
+    if (firstProblem) {
+      document.getElementById(fieldId(firstProblem))?.focus();
       return;
     }
-    if (!bot.verified || bot.isBot()) {
-      setError("Please verify you're not a robot.");
-      return;
-    }
-    setSubmitting(true);
+
+    setSending(true);
     try {
-      const res = await fetch(`${FUNCTIONS_URL}/submitBookingInquiry`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          eventType,
-          honeypot: bot.honeypotRef.current || "",
-        }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Submission failed");
-      }
+      const firstName = await submitInquiry(draft, { eventType, honeypot: honeypotRef.current?.value ?? "" });
       trackLead("inquiry_form", eventTypeFromForm(eventType));
-      setSubmitted(true);
+      setSentName(firstName);
+      window.scrollTo({ top: 0 });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Submission failed");
+      setSendError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
-      setSubmitting(false);
+      setSending(false);
     }
   };
 
-  if (submitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-6 pt-24">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-md">
-          <CheckCircle2 className="w-12 h-12 text-accent mx-auto mb-6" />
-          <h2 className="font-heading text-3xl text-dark mb-3">Inquiry Sent</h2>
-          <p className="text-muted text-sm mb-8">
-            Your booking inquiry has been forwarded to our host through Hospitable.
-            You&apos;ll receive a personal reply within 24 hours to confirm or discuss your dates.
-          </p>
-          <Link href="/" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
-            Return Home
-          </Link>
-        </motion.div>
-      </div>
-    );
-  }
+  if (sentName !== null) return <InquirySent firstName={sentName} />;
 
   return (
     <>
-      <section className="relative h-[45vh] min-h-[300px] flex items-center justify-center">
-        <Image src="/images/forest-approach.webp" alt="Inquire" fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="relative z-10 text-center text-white px-6">
-          <AnimatedSection>
-            <p className="text-[11px] tracking-[0.5em] uppercase mb-5 text-white/85">Prefer to Talk First?</p>
-            <h1 className="font-heading text-5xl sm:text-6xl font-normal">Send an Inquiry</h1>
-          </AnimatedSection>
-        </div>
-      </section>
+      {RECAPTCHA_ENABLED && <Script src={RECAPTCHA_SCRIPT_SRC} strategy="afterInteractive" />}
 
-      <section className="py-20 px-6">
-        <div className="max-w-2xl mx-auto">
-          <AnimatedSection>
-            <HandDrawnDivider variant="botanical" className="mb-8" />
-            <p className="text-muted text-base leading-relaxed text-center max-w-xl mx-auto mb-4">
-              Skip the instant-book flow and reach out to our host directly. We&apos;ll review your dates,
-              answer any questions, and confirm availability before any payment is taken.
-            </p>
-            <p className="text-center mb-12">
-              <a
-                href="tel:+12064711243"
-                className="text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors"
-              >
-                Call (206) 471-1243
-              </a>
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">First Name *</label>
-                  <input
-                    type="text"
-                    value={form.firstName}
-                    onChange={(e) => update("firstName", e.target.value)}
-                    className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Last Name</label>
-                  <input
-                    type="text"
-                    value={form.lastName}
-                    onChange={(e) => update("lastName", e.target.value)}
-                    className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Email *</label>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => update("email", e.target.value)}
-                  className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
+      <section aria-labelledby="inquire-heading" className="px-6 pt-28 pb-24 sm:pt-36 lg:pt-40">
+        <div className="max-w-6xl mx-auto">
+          {/* Eyebrow sits above both columns so the form starts level with the heading. */}
+          <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">
+            {eventType ? `${eventType} inquiry` : "Inquire"}
+          </p>
+          <div className="grid lg:grid-cols-[5fr_6fr] gap-10 lg:gap-20 items-start">
+            <div className="lg:sticky lg:top-32">
+              <h1 id="inquire-heading" className="font-heading text-4xl sm:text-5xl text-dark font-normal leading-tight mb-5">
+                Send us a message
+              </h1>
+              <p className="text-muted text-[15px] leading-relaxed max-w-md mb-4">
+                Takes about 30 seconds. No payment, no commitment. We&apos;ll reply within 24 hours.
+              </p>
+              <p className="text-[15px] text-muted">
+                Rather talk now? <a href={PHONE_HREF} className={LINK}>Call {PHONE_DISPLAY}</a>
+              </p>
+              <div className="hidden lg:block relative aspect-[4/5] mt-12 overflow-hidden">
+                <Image
+                  src="/images/forest-approach.webp"
+                  alt="The forest approach to ANEW"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 0px"
+                  className="object-cover"
                 />
               </div>
+            </div>
 
-              <div>
-                <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Phone</label>
-                <input
-                  type="tel"
-                  value={form.phone}
-                  onChange={(e) => update("phone", e.target.value)}
-                  className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
-                />
+            {/* lg:pt-2.5 lines the "Name" label's letters up with the heading's (the 48px font has more room above its caps). */}
+            <form onSubmit={handleSubmit} noValidate className="space-y-7 lg:pt-2.5" aria-describedby={sendError ? "inquiry-send-error" : undefined}>
+              <HandDrawnDivider variant="botanical" className="mb-2 lg:hidden" />
+
+              <Field id={fieldId("name")} label="Name" value={draft.name} onChange={update("name")} error={errors.name}
+                autoComplete="name" autoCapitalize="words" enterKeyHint="next" />
+              <Field id={fieldId("email")} label="Email" type="email" value={draft.email} onChange={update("email")} error={errors.email}
+                autoComplete="email" inputMode="email" autoCapitalize="none" spellCheck={false} enterKeyHint="next" />
+              <Field id={fieldId("phone")} label="Phone" optional type="tel" value={draft.phone} onChange={update("phone")} error={errors.phone}
+                hint="For a faster call back." autoComplete="tel" inputMode="tel" enterKeyHint="next" />
+              <Field id={fieldId("date")} label="Roughly when?" type="date" value={draft.date} onChange={update("date")} error={errors.date}
+                hint="A rough date is fine. We'll sort out the details together." min={minDate || undefined} max={maxDate || undefined} />
+              <MessageField id={fieldId("message")} label="Message" optional rows={3} value={draft.message} onChange={update("message")}
+                placeholder="Guest count, ideas, questions. Anything helps." />
+
+              {/* Spam trap: hidden from people, filled in by bots. */}
+              <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+                <input ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Preferred Date *</label>
-                  <input
-                    type="date"
-                    value={form.date}
-                    onChange={(e) => update("date", e.target.value)}
-                    className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Guests</label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={75}
-                    value={form.guestCount}
-                    onChange={(e) => update("guestCount", Math.max(1, Math.min(75, Number(e.target.value) || 1)))}
-                    className="w-full border-b border-border bg-transparent py-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Event Type</label>
-                <select
-                  value={eventType}
-                  onChange={(e) => update("eventType", e.target.value)}
-                  className="w-full border-b border-border bg-transparent py-3 text-sm text-dark focus:outline-none focus:border-accent transition-colors"
-                >
-                  <option value="">Select...</option>
-                  {EVENT_TYPES.map((t) => <option key={t}>{t}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Message</label>
-                <textarea
-                  rows={4}
-                  value={form.message}
-                  onChange={(e) => update("message", e.target.value)}
-                  placeholder="Tell us about your event, any questions, or special requests..."
-                  className="w-full border border-border bg-transparent p-3 text-sm text-dark placeholder-muted focus:outline-none focus:border-accent transition-colors resize-none"
-                />
-              </div>
-
-              {/* honeypot */}
-              <div style={{ position: "absolute", left: -9999, width: 1, height: 1, overflow: "hidden" }}>
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  onChange={(e) => { bot.honeypotRef.current = e.target.value; }}
-                />
-              </div>
-
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={bot.verified}
-                  onChange={(e) => bot.setVerified(e.target.checked)}
-                  className="mt-1"
-                />
-                <span className="text-xs text-muted">I&apos;m not a robot.</span>
-              </label>
-
-              {error && <p className="text-red-500 text-xs">{error}</p>}
+              {sendError && (
+                <p id="inquiry-send-error" role="alert" className="text-sm text-red-700">
+                  {sendError} Or call us at <a href={PHONE_HREF} className="underline">{PHONE_DISPLAY}</a>.
+                </p>
+              )}
 
               <button
                 type="submit"
-                disabled={submitting}
-                className="w-full text-[11px] tracking-[0.3em] uppercase bg-dark text-white py-4 hover:bg-accent transition-colors duration-500 disabled:opacity-50"
+                disabled={sending}
+                className="w-full text-[12px] tracking-[0.3em] uppercase bg-dark text-white py-4 hover:bg-accent focus-visible:bg-accent transition-colors duration-500 disabled:opacity-60"
               >
-                {submitting ? "Sending..." : "Send Inquiry"}
+                {sending ? "Sending…" : "Send Message"}
               </button>
 
-              <p className="text-[10px] text-muted text-center">
-                Your inquiry is forwarded to our host through Hospitable.
-                You&apos;ll receive a personal reply — no payment required at this step.
-              </p>
-
-              <p className="text-xs text-muted text-center pt-4">
-                Ready to book instantly? <Link href="/booking" className="text-dark border-b border-dark hover:text-accent hover:border-accent transition-colors">Book the estate</Link>
-              </p>
+              <div className="space-y-3 text-center">
+                <p className="text-xs text-muted">
+                  Goes straight to our host. Ready to book instantly instead? <Link href="/booking" className={LINK}>Book the estate</Link>
+                </p>
+                {RECAPTCHA_ENABLED && (
+                  <p className="text-[10px] text-muted/80">
+                    Protected by reCAPTCHA. Google&apos;s{" "}
+                    <a href="https://policies.google.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and{" "}
+                    <a href="https://policies.google.com/terms" className="underline" target="_blank" rel="noopener noreferrer">Terms</a> apply.
+                  </p>
+                )}
+              </div>
             </form>
-          </AnimatedSection>
+          </div>
         </div>
       </section>
     </>

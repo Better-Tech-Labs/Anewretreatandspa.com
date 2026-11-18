@@ -1,6 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { eventTypeFromQuery, inquireHref } from "./inquire.ts";
+import {
+  dateBounds,
+  eventTypeFromQuery,
+  inquireHref,
+  splitName,
+  validateInquiry,
+  type InquiryFields,
+} from "./inquire.ts";
 
 test("inquireHref with no type is the plain inquire page", () => {
   assert.equal(inquireHref(), "/inquire");
@@ -32,4 +39,57 @@ test("eventTypeFromQuery returns empty for missing or unknown types", () => {
   assert.equal(eventTypeFromQuery(""), "");
   assert.equal(eventTypeFromQuery("?utm_source=ig"), "");
   assert.equal(eventTypeFromQuery("?type=<script>"), "");
+});
+
+// --- splitName: one "Name" box, but the server and Hospitable want first/last ---
+
+test("splitName keeps a single name as the first name", () => {
+  assert.deepEqual(splitName("Jane"), { firstName: "Jane", lastName: "" });
+});
+
+test("splitName puts the first word first and the rest last", () => {
+  assert.deepEqual(splitName("Mary Ann Smith"), { firstName: "Mary", lastName: "Ann Smith" });
+});
+
+test("splitName trims and collapses extra spaces", () => {
+  assert.deepEqual(splitName("  Jane    Doe  "), { firstName: "Jane", lastName: "Doe" });
+});
+
+// --- dateBounds: the picker only offers dates the server will accept ---
+
+test("dateBounds starts today in local time and stays inside the server's 3-year window", () => {
+  const { min, max } = dateBounds(new Date(2026, 10, 17, 23, 30));
+  assert.equal(min, "2026-11-17");
+  assert.equal(max, "2029-11-15");
+});
+
+// --- validateInquiry: friendly, per-field messages ---
+
+const TODAY = new Date(2026, 10, 17);
+const valid: InquiryFields = { name: "Jane Doe", email: "jane@example.com", phone: "", date: "2026-12-05" };
+
+test("a filled-in form with no phone has no errors", () => {
+  assert.deepEqual(validateInquiry(valid, TODAY), {});
+});
+
+test("name, email and date are required", () => {
+  const errors = validateInquiry({ name: " ", email: "", phone: "", date: "" }, TODAY);
+  assert.deepEqual(Object.keys(errors).sort(), ["date", "email", "name"]);
+});
+
+test("a mistyped email gets its own message", () => {
+  const errors = validateInquiry({ ...valid, email: "jane@example" }, TODAY);
+  assert.ok(errors.email);
+  assert.notEqual(errors.email, validateInquiry({ ...valid, email: "" }, TODAY).email);
+});
+
+test("phone is optional but must look like a phone number when given", () => {
+  assert.deepEqual(validateInquiry({ ...valid, phone: "(206) 471-1243" }, TODAY), {});
+  assert.ok(validateInquiry({ ...valid, phone: "call me" }, TODAY).phone);
+});
+
+test("past dates and dates beyond the window are rejected", () => {
+  assert.ok(validateInquiry({ ...valid, date: "2026-11-16" }, TODAY).date);
+  assert.ok(validateInquiry({ ...valid, date: "2030-01-01" }, TODAY).date);
+  assert.deepEqual(validateInquiry({ ...valid, date: "2026-11-17" }, TODAY), {});
 });
