@@ -112,7 +112,7 @@ export const sampleDay: SampleDayContent = {
     { time: "11:30", title: "Log Boom Park", detail: "A stop on the beach at the top of the lake. Seaplanes take off and land on this stretch of water." },
     { time: "1:00", title: "Settle in at the estate", detail: "Bags go to the bedrooms. Lunch comes out of the estate kitchen." },
     { time: "2:30", title: "Sauna and cold plunge", detail: "A few rounds of hot and cold for those who want it. The rest find a chair by the stream." },
-    { time: "4:30", title: "The other guests arrive", detail: "Drinks in the courtyard while the tables are set inside." },
+    { time: "4:30", title: "The other guests arrive", detail: "Everyone gathers in the courtyard while the tables are set inside." },
     { time: "6:00", title: "Dinner in the Grand Hall", detail: "Cooked on site and served under the timber beams." },
     { time: "8:30", title: "Fire pit", detail: "String lights on, fire lit, and no closing time posted on a door." },
   ],

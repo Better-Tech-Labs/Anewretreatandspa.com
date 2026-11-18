@@ -110,7 +110,7 @@ export const sampleDay: SampleDayContent = {
     { time: "4:30", title: "Vows", detail: "In the cedars or beside the stream, with your officiant and whoever you brought along." },
     { time: "5:00", title: "Portraits", detail: "Along the garden paths while the sun is low. Deer sometimes wander through around dusk." },
     { time: "6:30", title: "Wedding dinner", detail: "Several courses cooked by a resident chef, served by the fire, in the Grand Hall or outside." },
-    { time: "8:30", title: "Fire and a soak", detail: "A drink at the fire pit, then the soaking tub." },
+    { time: "8:30", title: "Fire and a soak", detail: "Time at the fire pit, then the soaking tub." },
     { time: "Morning", title: "Married", detail: "Sauna, cold plunge, coffee. Nowhere to be." },
   ],
 };

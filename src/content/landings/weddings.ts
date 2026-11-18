@@ -95,7 +95,7 @@ export const spaces: RoomsContent = {
     { img: "/images/master-bedroom.webp", alt: "Master Suite with a reclaimed timber king bed and vaulted ceiling at ANEW", name: "Master Suite", desc: "The couple's room. A reclaimed timber king bed under a vaulted ceiling, and the most private bedroom in the house." },
     { img: "/images/event-hall.webp", alt: "Empty Event Pavilion with timber beams, concrete floor and French doors at ANEW", name: "Event Pavilion", desc: "The reception dinner. An open hall with polished concrete floors and French doors to the forest. Expandable tables are on hand, and the room is the indoor option if the ceremony moves inside." },
     { img: "/images/interior-living.webp", alt: "Grand Hall seating under an iron chandelier with tall windows behind at ANEW", name: "Grand Hall", desc: "Toasts and dancing. Timber beams, an iron chandelier and floor-to-ceiling windows, with space to clear the floor once dinner is done." },
-    { img: "/images/outdoor-firepit-cabin.webp", alt: "Lit fire pit ringed by lounge chairs on the courtyard lawn at ANEW", name: "Courtyard & Fire Pit", desc: "Cocktail hour and the end of the night. Drinks under the string lights after the ceremony, then a fire for whoever is still up." },
+    { img: "/images/outdoor-firepit-cabin.webp", alt: "Lit fire pit ringed by lounge chairs on the courtyard lawn at ANEW", name: "Courtyard & Fire Pit", desc: "The hour after the ceremony and the end of the night. Guests gather under the string lights, then a fire for whoever is still up." },
   ],
 };
 
@@ -109,7 +109,7 @@ export const sampleDay: SampleDayContent = {
     { time: "1:00", title: "Vendors arrive", detail: "Your florist, caterer and photographer set up while our on-site contact handles access and logistics." },
     { time: "3:00", title: "First look", detail: "A quiet few minutes on the garden paths by the stream before anyone else sees you." },
     { time: "4:00", title: "Ceremony on the lawn", detail: "Guests seated on the grass, tall trees behind you, the house at their backs." },
-    { time: "4:30", title: "Drinks in the courtyard", detail: "Everyone moves a few steps to the courtyard while you take family photos on the lawn." },
+    { time: "4:30", title: "Everyone to the courtyard", detail: "Everyone moves a few steps to the courtyard while you take family photos on the lawn." },
     { time: "6:00", title: "Dinner", detail: "Long tables in the Event Pavilion with the French doors open, plated or family-style." },
     { time: "8:00", title: "Toasts and dancing", detail: "Back to the Grand Hall for the first dance under the chandelier." },
     { time: "Late", title: "Fire pit", detail: "The music winds down. The people staying over pull chairs up to the fire." },
@@ -138,11 +138,11 @@ export const diningBand: ImageBandContent = {
 
 export const dine: SplitFeatureContent = {
   image: { src: "/images/kitchen-sink.webp", alt: "Farmhouse sink and kitchen windows looking onto the courtyard at ANEW" },
-  eyebrow: "Food & Drink",
+  eyebrow: "Food",
   titleLines: ["Our Chefs", "or Your Caterer"],
   paragraphs: [
     "Resident chefs can cook the wedding dinner in the estate kitchen, which opens straight onto the courtyard. Menus are seasonal and locally sourced, with fresh salmon and garden vegetables, and can be plated or family-style. Tell us about allergies and the menu is built around them.",
-    "Already have a caterer you love? Approved outside vendors are welcome, and the kitchen is set up for them. Bar service, a rehearsal dinner or a farewell brunch can be added to a wedding package.",
+    "Already have a caterer you love? Approved outside vendors are welcome, and the kitchen is set up for them. A rehearsal dinner or a farewell brunch can be added to a wedding package.",
   ],
   actions: [
     { kind: "button", label: "Inquire", href: INQUIRE_HREF },
