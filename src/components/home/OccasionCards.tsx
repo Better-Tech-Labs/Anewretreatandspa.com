@@ -57,6 +57,7 @@ export default function OccasionCards({ content, footnote, trackName }: Occasion
                     src={card.img}
                     alt={card.alt ?? card.title}
                     fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>

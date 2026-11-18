@@ -34,7 +34,7 @@ const SECONDARY_CTA_CLASS =
 export default function HeroSection({ content, trackName }: { content: HeroContent } & SectionTracking) {
   return (
     <section data-track-section={trackName} className="relative h-screen flex items-center justify-center overflow-hidden ken-burns">
-      <Image src={content.image.src} alt={content.image.alt} fill className="object-cover" priority />
+      <Image src={content.image.src} alt={content.image.alt} fill sizes="100vw" className="object-cover" priority />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
       <div className="relative z-10 text-center text-white px-6 max-w-5xl">
         <motion.p
@@ -57,7 +57,7 @@ export default function HeroSection({ content, trackName }: { content: HeroConte
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
-          className="text-white/50 text-sm sm:text-base mb-2 max-w-lg mx-auto leading-relaxed"
+          className={`text-white/85 text-sm sm:text-base ${content.priceNote ? "mb-2" : "mb-8"} max-w-lg mx-auto leading-relaxed`}
         >
           {content.subtitle}
         </motion.p>
@@ -66,7 +66,7 @@ export default function HeroSection({ content, trackName }: { content: HeroConte
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="text-white/40 text-xs tracking-[0.2em] uppercase mt-2 mb-8"
+            className="text-white/75 text-xs tracking-[0.2em] uppercase mt-2 mb-8"
           >
             {content.priceNote}
           </motion.p>
