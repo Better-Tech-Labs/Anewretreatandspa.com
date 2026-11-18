@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { inquireHref } from "@/lib/inquire";
 import { eventTypeFromForm } from "@/lib/analytics";
+import { AUDIENCE_EVENT_TYPE } from "@/lib/audience";
+import { useAudience } from "@/lib/useAudience";
 
 /**
  * Small, low-commitment path to the inquiry form, placed beside "Book" CTAs and
@@ -16,7 +20,10 @@ type Tone = "dark" | "light";
 type Size = "sm" | "md";
 
 interface InquireLinkProps {
-  /** Pre-selects this event type on the form. Must match EVENT_TYPES, otherwise ignored. */
+  /**
+   * Pre-selects this event type on the form. Must match EVENT_TYPES, otherwise ignored.
+   * Left out, it falls back to the visitor's audience (a corporate visitor gets "Corporate Retreat").
+   */
   type?: string;
   /** Lead-in sentence for the inline look, e.g. "Not ready to book?". */
   lead?: string;
@@ -60,9 +67,11 @@ export default function InquireLink({
   size = "md",
   className = "",
 }: InquireLinkProps) {
-  const href = inquireHref(type);
+  const audience = useAudience();
+  const formType = type ?? (audience ? AUDIENCE_EVENT_TYPE[audience] : undefined);
+  const href = inquireHref(formType);
   // Read by AnalyticsListeners so cta_click reports wedding/corporate/… instead of the page default.
-  const eventType = type ? eventTypeFromForm(type) : undefined;
+  const eventType = formType ? eventTypeFromForm(formType) : undefined;
 
   if (variant === "label") {
     return (

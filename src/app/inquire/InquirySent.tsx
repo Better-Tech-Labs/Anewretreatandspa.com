@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle2, Phone } from "lucide-react";
+import { homeHrefFor } from "@/lib/audience";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/contact";
+import { useAudience } from "@/lib/useAudience";
 
 /**
  * Shown after a successful send. The call button is the point: a visitor who
@@ -9,6 +11,7 @@ import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/contact";
  * phone_click is tracked by AnalyticsListeners (cta_location "inquiry_sent").
  */
 export default function InquirySent({ firstName }: { firstName: string }) {
+  const homeHref = homeHrefFor(useAudience());
   return (
     <section
       data-track-section="inquiry_sent"
@@ -42,7 +45,7 @@ export default function InquirySent({ firstName }: { firstName: string }) {
         </div>
 
         <Link
-          href="/"
+          href={homeHref}
           className="inline-block mt-10 text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors"
         >
           Back to home

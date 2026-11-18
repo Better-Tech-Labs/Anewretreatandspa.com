@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import AudienceExitLink from "@/components/AudienceExitLink";
 import { track } from "@/lib/analytics";
 import { INQUIRE_PATH, inquireHref } from "@/lib/inquire";
+import { useAudience } from "@/lib/useAudience";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const audience = useAudience();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +82,7 @@ export default function Footer() {
               {[
                 { label: "The Estate", href: "/venue" },
                 { label: "Experiences", href: "/experiences" },
+                { label: "Corporate Retreats", href: "/corporate-retreats" },
                 { label: "Gallery", href: "/gallery" },
                 { label: "Book", href: "/booking" },
                 { label: "Inquire", href: INQUIRE_PATH },
@@ -127,6 +131,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Way out of an audience layout, shown only to visitors who are in one */}
+      {audience && (
+        <div className="border-t border-white/10">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-6">
+            <AudienceExitLink tone="light" className="text-center sm:text-left" />
+          </div>
+        </div>
+      )}
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">

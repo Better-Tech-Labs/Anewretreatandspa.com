@@ -3,6 +3,8 @@
  * Never pass form field contents here: params describe the action, not the person.
  */
 
+import { readAudience, type Audience } from "./audience.ts";
+
 export type EventType = "wedding" | "corporate" | "spa" | "dining" | "general";
 
 type ParamValue = string | number | boolean;
@@ -46,6 +48,21 @@ export function isEventType(value: string | null | undefined): value is EventTyp
   return !!value && (EVENT_TYPES as readonly string[]).includes(value);
 }
 
+/** Value of the `audience` param for visitors who aren't in an audience layout. */
+const GENERAL_AUDIENCE = "general";
+
+/**
+ * Which version of the site the visitor is seeing, from the audience cookie.
+ * Register `audience` as a GA4 custom dimension to compare versions.
+ */
+function currentAudience(): Audience | typeof GENERAL_AUDIENCE {
+  try {
+    return readAudience(document.cookie) ?? GENERAL_AUDIENCE;
+  } catch {
+    return GENERAL_AUDIENCE; // Cookies blocked, or no document.
+  }
+}
+
 /** Sends one GA4 event. Fails silently when gtag is blocked or missing. */
 export function track(eventName: string, params: TrackParams = {}): void {
   if (typeof window === "undefined") return;
@@ -55,6 +72,8 @@ export function track(eventName: string, params: TrackParams = {}): void {
       page_path: pagePath,
       event_type: eventTypeForPath(pagePath),
       ...params,
+      // Last, so it always reflects the cookie rather than a caller's value.
+      audience: currentAudience(),
     };
     if (!payload.event_type) payload.event_type = eventTypeForPath(pagePath);
     window.gtag?.("event", eventName, payload);

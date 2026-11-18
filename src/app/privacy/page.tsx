@@ -9,7 +9,7 @@ export default function PrivacyPage() {
         <AnimatedSection>
           <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">Legal</p>
           <h1 className="font-heading text-4xl text-dark font-normal mb-10">Privacy Policy</h1>
-          <p className="text-xs text-muted mb-8">Last updated: March 2026</p>
+          <p className="text-xs text-muted mb-8">Last updated: November 2026</p>
 
           <div className="space-y-8 text-sm text-muted leading-relaxed">
             <section>
@@ -60,7 +60,9 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="font-heading text-lg text-dark mb-3">6. Cookies</h2>
-              <p>We use essential cookies for authentication and site functionality. We do not use tracking cookies for advertising purposes.</p>
+              <p>We use essential cookies for authentication and site functionality.</p>
+              <p className="mt-2">We use Google Analytics and Google Ads to understand how visitors find and use the site and to measure our advertising. These services set their own cookies. You can read how Google uses this information in <a href="https://policies.google.com/technologies/partner-sites" className="text-dark underline hover:text-accent" target="_blank" rel="noopener noreferrer">Google&apos;s policy for partner sites</a>, and you can block these cookies in your browser settings.</p>
+              <p className="mt-2">We also use one first-party preference cookie (<code>anew_aud</code>) that remembers what you were interested in when you arrived, such as corporate retreats, so the site can show you the most relevant pages. It holds a single word, lasts 30 days, contains no personal information, and is not shared with anyone. You can clear it at any time with the &ldquo;See everything ANEW offers&rdquo; link in the site footer, or by clearing your browser&apos;s cookies.</p>
             </section>
 
             <section>
