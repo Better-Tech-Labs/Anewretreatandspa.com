@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
+import { faqPageSchema, jsonLd } from "@/lib/structuredData";
 import { EYEBROW_CLASS } from "./shared";
 import type { SectionTracking } from "./types";
 
@@ -15,25 +16,10 @@ export interface FaqContent {
   faqs: readonly Faq[];
 }
 
-/** FAQPage structured data, so the questions can show up in search results. */
-function faqSchemaJson(faqs: readonly Faq[]): string {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: { "@type": "Answer", text: faq.a },
-    })),
-  };
-  // Escaping "<" keeps the content from ever closing the script tag.
-  return JSON.stringify(schema).replace(/</g, "\\u003c");
-}
-
 export default function FaqSection({ content, trackName }: { content: FaqContent } & SectionTracking) {
   return (
     <section data-track-section={trackName} className="py-28 sm:py-36 bg-cream px-6 relative overflow-hidden">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqSchemaJson(content.faqs) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqPageSchema(content.faqs)) }} />
       <div className="max-w-2xl mx-auto">
         <AnimatedSection className="text-center mb-14">
           <HandDrawnDivider variant="simple" className="mb-6" />

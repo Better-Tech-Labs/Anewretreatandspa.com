@@ -127,3 +127,31 @@ test("a caller cannot overwrite the audience", () => {
   assert.equal(onlyEvent().params.audience, "corporate");
   clearDocument();
 });
+
+// ---------------------------------------------------------------------------
+// Occasion landing pages report under their own event type.
+// ---------------------------------------------------------------------------
+import { eventTypeForPath } from "./analytics.ts";
+import { LANDING_PAGES } from "./landingPages.ts";
+
+test("each landing page maps to its analytics bucket", () => {
+  assert.equal(eventTypeForPath("/weddings"), "wedding");
+  assert.equal(eventTypeForPath("/elopements"), "wedding");
+  assert.equal(eventTypeForPath("/wellness-retreats"), "spa");
+  assert.equal(eventTypeForPath("/private-dinners"), "dining");
+  assert.equal(eventTypeForPath("/corporate-retreats"), "corporate");
+  assert.equal(eventTypeForPath("/birthday-parties"), "general");
+});
+
+test("landing page paths are unique and well formed", () => {
+  const paths = LANDING_PAGES.map((page) => page.path);
+  assert.equal(new Set(paths).size, paths.length);
+  for (const path of paths) assert.match(path, /^\/[a-z-]+$/);
+});
+
+test("existing pages keep their buckets", () => {
+  assert.equal(eventTypeForPath("/packages"), "wedding");
+  assert.equal(eventTypeForPath("/experiences"), "spa");
+  assert.equal(eventTypeForPath("/chefs"), "dining");
+  assert.equal(eventTypeForPath("/"), "general");
+});

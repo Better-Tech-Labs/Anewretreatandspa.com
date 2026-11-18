@@ -120,9 +120,8 @@ export const occasions: OccasionsContent = {
   eyebrow: "Group & Gather",
   title: "Your Occasion, Our Setting",
   cards: [
-    // Weddings are inquire-only, so their "Learn More" goes to the packages page, not checkout.
-    { img: "/images/exterior-hero.webp", title: "Weddings", href: "/packages", inquireType: "Wedding", desc: "Ceremony lawns flanked by towering trees, fire copper bowl receptions under string lights, and 13 beds for the wedding party." },
-    { img: "/images/interior-living-wide.webp", title: "Retreats", href: BOOKING_HREF, inquireType: "Corporate Retreat", desc: "Inspire your team in a setting that sparks creativity. The Grand Hall, breakout spaces, and nature trails await." },
+    { img: "/images/exterior-hero.webp", title: "Weddings", href: "/weddings", inquireType: "Wedding", desc: "Ceremony lawns flanked by towering trees, fire copper bowl receptions under string lights, and 13 beds for the wedding party." },
+    { img: "/images/interior-living-wide.webp", title: "Retreats", href: "/corporate-retreats", inquireType: "Corporate Retreat", desc: "Inspire your team in a setting that sparks creativity. The Grand Hall, breakout spaces, and nature trails await." },
     { img: "/images/outdoor-seating.webp", title: "Celebrations", href: BOOKING_HREF, desc: "Boutique weddings, vow renewals, anniversaries, birthdays, graduation parties, 4th of July parties, baby showers, girls spa getaways, baptisms, private dinners, s'mores by the fire, etc. — every occasion finds its setting." },
   ],
 };

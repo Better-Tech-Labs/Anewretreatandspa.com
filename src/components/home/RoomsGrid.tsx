@@ -31,7 +31,7 @@ const STAGGER_SECONDS = 0.08;
 
 export default function RoomsGrid({ content, id, trackName }: RoomsGridProps) {
   return (
-    <section data-track-section={trackName} id={id} className="py-28 sm:py-36 bg-cream relative overflow-hidden">
+    <section data-track-section={trackName} id={id} className="py-28 sm:py-36 bg-cream relative overflow-hidden scroll-mt-16">
       <CornerAccent position="top-right" />
       <CornerAccent position="bottom-left" />
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
