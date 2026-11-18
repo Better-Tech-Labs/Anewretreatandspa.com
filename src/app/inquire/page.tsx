@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -10,13 +10,21 @@ import HandDrawnDivider from "@/components/HandDrawnDivider";
 import { useBotGuard } from "@/components/BotGuard";
 import { EVENT_TYPES } from "@/lib/booking";
 import { eventTypeFromForm, trackLead } from "@/lib/analytics";
+import { eventTypeFromQuery } from "@/lib/inquire";
 
 const FUNCTIONS_URL =
   process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
   "https://us-central1-bakkers-website-847ba.cloudfunctions.net";
 
+// The query string can't change while this page is mounted without a re-render,
+// so there is nothing to subscribe to. The server snapshot is "" (static export).
+const subscribeToNothing = () => () => {};
+const readSearch = () => window.location.search;
+const serverSearch = () => "";
+
 export default function InquirePage() {
   const bot = useBotGuard();
+  const search = useSyncExternalStore(subscribeToNothing, readSearch, serverSearch);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -24,9 +32,11 @@ export default function InquirePage() {
     phone: "",
     date: "",
     guestCount: 10,
-    eventType: "",
+    // null until the visitor picks one; until then ?type= from the link decides.
+    eventType: null as string | null,
     message: "",
   });
+  const eventType = form.eventType ?? eventTypeFromQuery(search);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +62,7 @@ export default function InquirePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          eventType,
           honeypot: bot.honeypotRef.current || "",
         }),
       });
@@ -59,7 +70,7 @@ export default function InquirePage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
-      trackLead("inquiry_form", eventTypeFromForm(form.eventType));
+      trackLead("inquiry_form", eventTypeFromForm(eventType));
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Submission failed");
@@ -184,7 +195,7 @@ export default function InquirePage() {
               <div>
                 <label className="text-[11px] tracking-[0.2em] uppercase text-muted block mb-2">Event Type</label>
                 <select
-                  value={form.eventType}
+                  value={eventType}
                   onChange={(e) => update("eventType", e.target.value)}
                   className="w-full border-b border-border bg-transparent py-3 text-sm text-dark focus:outline-none focus:border-accent transition-colors"
                 >

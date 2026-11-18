@@ -11,6 +11,7 @@ import Tilt3D from "@/components/Tilt3D";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import CornerAccent from "@/components/CornerAccent";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
+import InquireLink from "@/components/InquireLink";
 import { useBotGuard } from "@/components/BotGuard";
 import { trackLead } from "@/lib/analytics";
 
@@ -139,6 +140,13 @@ export default function HomePage() {
               Schedule a Tour
             </Link>
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.4 }}
+          >
+            <InquireLink tone="light" lead="Questions first?" className="mt-7" />
+          </motion.div>
         </div>
         <motion.div
           initial={{ opacity: 0 }}
@@ -177,6 +185,7 @@ export default function HomePage() {
               <span className="text-accent">·</span>
               <span>Elevated gym</span>
             </div>
+            <InquireLink className="mt-10">Tell us what you&apos;re planning</InquireLink>
           </AnimatedSection>
         </div>
       </section>
@@ -247,12 +256,15 @@ export default function HomePage() {
             <p className="text-muted leading-relaxed mb-8 text-[15px]">
               Weddings, elopements, vow renewals, corporate retreats, birthday celebrations, graduation parties, 4th of July parties, anniversaries, baby showers, baptisms, girls spa getaways, wellness retreats, and private dinners — every gathering finds its perfect setting here.
             </p>
-            <Link
-              href="/booking"
-              className="text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors duration-300"
-            >
-              Plan Your Event
-            </Link>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Link
+                href="/booking"
+                className="text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors duration-300"
+              >
+                Plan Your Event
+              </Link>
+              <InquireLink variant="label" type="Wedding">Inquire About Weddings</InquireLink>
+            </div>
           </AnimatedSection>
           <AnimatedSection direction="right" className="order-1 lg:order-2">
             <Tilt3D className="relative aspect-[4/5] lg:aspect-[3/4] max-h-[700px] overflow-hidden">
@@ -393,9 +405,10 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
             {[
-              { img: "/images/exterior-hero.webp", title: "Weddings", desc: "Ceremony lawns flanked by towering trees, fire copper bowl receptions under string lights, and 13 beds for the wedding party." },
-              { img: "/images/interior-living-wide.webp", title: "Retreats", desc: "Inspire your team in a setting that sparks creativity. The Grand Hall, breakout spaces, and nature trails await." },
-              { img: "/images/outdoor-seating.webp", title: "Celebrations", desc: "Boutique weddings, vow renewals, anniversaries, birthdays, graduation parties, 4th of July parties, baby showers, girls spa getaways, baptisms, private dinners, s'mores by the fire, etc. — every occasion finds its setting." },
+              // Weddings are inquire-only, so their "Learn More" goes to the packages page, not checkout.
+              { img: "/images/exterior-hero.webp", title: "Weddings", href: "/packages", inquireType: "Wedding", desc: "Ceremony lawns flanked by towering trees, fire copper bowl receptions under string lights, and 13 beds for the wedding party." },
+              { img: "/images/interior-living-wide.webp", title: "Retreats", href: "/booking", inquireType: "Corporate Retreat", desc: "Inspire your team in a setting that sparks creativity. The Grand Hall, breakout spaces, and nature trails await." },
+              { img: "/images/outdoor-seating.webp", title: "Celebrations", href: "/booking", inquireType: undefined, desc: "Boutique weddings, vow renewals, anniversaries, birthdays, graduation parties, 4th of July parties, baby showers, girls spa getaways, baptisms, private dinners, s'mores by the fire, etc. — every occasion finds its setting." },
             ].map((card, i) => (
               <AnimatedSection key={card.title} delay={i * 0.12}>
                 <div className="group cursor-pointer depth-float">
@@ -409,12 +422,15 @@ export default function HomePage() {
                   </div>
                   <h4 className="font-heading text-2xl text-dark mb-3">{card.title}</h4>
                   <p className="text-muted text-sm leading-relaxed mb-4">{card.desc}</p>
-                  <Link
-                    href="/booking"
-                    className="text-[10px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-0.5 hover:text-accent hover:border-accent transition-colors"
-                  >
-                    Learn More
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Link
+                      href={card.href}
+                      className="text-[10px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-0.5 hover:text-accent hover:border-accent transition-colors"
+                    >
+                      Learn More
+                    </Link>
+                    <InquireLink variant="label" size="sm" type={card.inquireType}>Inquire</InquireLink>
+                  </div>
                 </div>
               </AnimatedSection>
             ))}
@@ -441,6 +457,7 @@ export default function HomePage() {
                 router.push(`/booking?date=${y}-${m}-${d}`);
               }}
             />
+            <InquireLink lead="Date taken, or want to hold one?" className="text-center mt-8" />
           </AnimatedSection>
           <AnimatedSection className="text-center mt-14">
             <p className="text-muted text-[15px] leading-relaxed max-w-2xl mx-auto">
@@ -538,6 +555,7 @@ export default function HomePage() {
                 Schedule a Tour
               </Link>
             </div>
+            <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>
@@ -613,9 +631,12 @@ export default function HomePage() {
             <p className="text-white text-sm font-heading">From $5,500/night</p>
             <p className="text-white/40 text-[9px] tracking-[0.2em] uppercase">Limited dates available</p>
           </div>
-          <Link href="/booking" className="text-[10px] tracking-[0.25em] uppercase bg-white text-dark px-5 py-2.5 hover:bg-accent hover:text-white transition-colors">
-            Book Now
-          </Link>
+          <div className="flex items-center gap-4 shrink-0">
+            <InquireLink variant="label" tone="light" size="sm">Inquire</InquireLink>
+            <Link href="/booking" className="text-[10px] tracking-[0.25em] uppercase bg-white text-dark px-5 py-2.5 hover:bg-accent hover:text-white transition-colors">
+              Book Now
+            </Link>
+          </div>
         </div>
       </div>
     </>

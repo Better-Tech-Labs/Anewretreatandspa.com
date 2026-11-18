@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
+import InquireLink from "@/components/InquireLink";
 
 type Category = "All" | "Exterior" | "Interior" | "Grounds" | "Dining";
 
@@ -256,6 +257,7 @@ export default function GalleryPage() {
                 Schedule a Tour
               </Link>
             </div>
+            <InquireLink lead="Not ready to book?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

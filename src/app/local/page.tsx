@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Mountain, TreePine, ShoppingBag, Landmark, CircleDot, Waves } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
+import InquireLink from "@/components/InquireLink";
 
 const categories = [
   {
@@ -137,6 +138,7 @@ export default function LocalPage() {
             <a href="/booking" className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
               Book Your Stay
             </a>
+            <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

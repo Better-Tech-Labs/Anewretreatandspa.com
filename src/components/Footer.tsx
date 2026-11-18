@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { track } from "@/lib/analytics";
+import { INQUIRE_PATH, inquireHref } from "@/lib/inquire";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -80,6 +81,7 @@ export default function Footer() {
                 { label: "Experiences", href: "/experiences" },
                 { label: "Gallery", href: "/gallery" },
                 { label: "Book", href: "/booking" },
+                { label: "Inquire", href: INQUIRE_PATH },
               ].map((link) => (
                 <Link
                   key={link.label}
@@ -97,7 +99,7 @@ export default function Footer() {
             <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-6">Gather</p>
             <div className="flex flex-col gap-3">
               {[
-                { label: "Weddings", href: "/booking" },
+                { label: "Weddings", href: inquireHref("Wedding") },
                 { label: "Wellness Retreats", href: "/experiences" },
                 { label: "Corporate Retreats", href: "/experiences" },
                 { label: "Private Dining", href: "/experiences" },
