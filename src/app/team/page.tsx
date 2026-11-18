@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
+import InquireLink from "@/components/InquireLink";
 import { getTeamMembers, type TeamMember } from "@/lib/team";
 import { Users } from "lucide-react";
 
@@ -113,6 +114,7 @@ export default function TeamPage() {
             <Link href="/#contact" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
               Schedule a Tour
             </Link>
+            <InquireLink lead="Prefer to write first?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

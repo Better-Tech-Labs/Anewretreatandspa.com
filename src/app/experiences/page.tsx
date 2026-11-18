@@ -5,6 +5,7 @@ import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import CornerAccent from "@/components/CornerAccent";
+import InquireLink from "@/components/InquireLink";
 
 
 const experiences = [
@@ -180,6 +181,7 @@ export default function ExperiencesPage() {
             <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-10 py-4 hover:bg-accent transition-colors duration-500">
               Book Now
             </Link>
+            <InquireLink lead="Not sure which to choose?" className="mt-10">Ask us to plan it with you</InquireLink>
           </AnimatedSection>
         </div>
       </section>
@@ -195,6 +197,7 @@ export default function ExperiencesPage() {
             <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
               Plan Your Experience
             </Link>
+            <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

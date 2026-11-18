@@ -8,6 +8,8 @@ import { Menu, X, User, Phone } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { logOut } from "@/lib/auth";
 import AuthModal from "@/components/AuthModal";
+import { homeHrefFor } from "@/lib/audience";
+import { useAudience } from "@/lib/useAudience";
 
 const leftNavLinks = [
   { label: "About", href: "/venue" },
@@ -29,9 +31,11 @@ export default function Navbar() {
   const [authOpen, setAuthOpen] = useState(false);
   const { user } = useAuth();
   const pathname = usePathname();
+  const audience = useAudience();
+  const homeHref = homeHrefFor(audience);
 
   // Pages with dark hero images where white nav text works
-  const darkHeroPages = ["/", "/venue", "/experiences", "/gallery", "/packages", "/boutique", "/booking"];
+  const darkHeroPages = ["/", "/venue", "/experiences", "/gallery", "/packages", "/boutique", "/booking", "/corporate-retreats"];
   const hasDarkHero = darkHeroPages.includes(pathname);
   const useDarkText = scrolled || !hasDarkHero;
 
@@ -70,7 +74,7 @@ export default function Navbar() {
           </div>
 
           {/* Center logo */}
-          <Link href="/" className="col-start-2 flex items-center">
+          <Link href={homeHref} className="col-start-2 flex items-center">
             <span
               className={`font-heading text-[1.7rem] xl:text-[2rem] tracking-[0.35em] transition-colors duration-500 font-light ${
                 useDarkText ? "text-dark" : "text-white"

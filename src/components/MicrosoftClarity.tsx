@@ -2,12 +2,15 @@ import Script from "next/script";
 
 /**
  * Heatmaps and session recordings. Read at build time (static export), so set
- * CLARITY_PROJECT_ID before `npm run build`. Renders nothing when it is empty.
+ * CLARITY_PROJECT_ID before `npm run build`. Renders nothing when it is empty,
+ * and nothing under `next dev` so localhost sessions aren't recorded.
  */
 const CLARITY_PROJECT_ID = (process.env.CLARITY_PROJECT_ID || process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || "").trim();
 const VALID_ID = /^[a-z0-9]+$/i;
+const IS_PRODUCTION_BUILD = process.env.NODE_ENV === "production";
 
 export default function MicrosoftClarity() {
+  if (!IS_PRODUCTION_BUILD) return null;
   if (!CLARITY_PROJECT_ID || !VALID_ID.test(CLARITY_PROJECT_ID)) return null;
   return (
     <Script id="microsoft-clarity" strategy="afterInteractive">

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import CornerAccent from "@/components/CornerAccent";
+import InquireLink from "@/components/InquireLink";
 import { useState } from "react";
 
 const spaces = [
@@ -279,6 +280,7 @@ export default function VenuePage() {
               </div>
             ))}
           </div>
+          <InquireLink lead="Didn't see your question?" className="text-center mt-10">Ask us directly</InquireLink>
         </div>
       </section>
 
@@ -293,6 +295,7 @@ export default function VenuePage() {
             <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
               Book a Tour
             </Link>
+            <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

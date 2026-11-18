@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -13,8 +13,10 @@ import AuthModal from "@/components/AuthModal";
 import StripePayment from "@/components/StripePayment";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import { BLOCK_OPTIONS, EVENT_TYPES, formatTime, type DurationBlock } from "@/lib/booking";
+import { eventTypeFromForm, trackBeginCheckout, trackBookingPaid } from "@/lib/analytics";
 
 const STEPS = ["Date & Time", "Your Details", "Payment"];
+const PAYMENT_STEP = STEPS.length - 1;
 
 /** Format a Date as YYYY-MM-DD in the user's local timezone.
  *  Using toISOString() shifts dates across the date line for evening Pacific users. */
@@ -116,15 +118,26 @@ function BookingPageInner() {
   const next = () => { if (validateStep()) setStep((s) => Math.min(s + 1, STEPS.length - 1)); };
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
+  const checkoutTracked = useRef(false);
+
   const selectedBlock = BLOCK_OPTIONS.find((b) => b.hours === form.blockHours) || null;
   const chargeAmount = selectedBlock?.price || 0;
 
-  const handlePaymentSuccess = async (_paymentIntentId: string) => {
+  // Reaching the payment step is the real "begin checkout", once per visit.
+  // (Loading /booking is not; that is what the old Ads conversion counted.)
+  useEffect(() => {
+    if (step !== PAYMENT_STEP || checkoutTracked.current) return;
+    checkoutTracked.current = true;
+    trackBeginCheckout(chargeAmount, eventTypeFromForm(form.eventType));
+  }, [step, chargeAmount, form.eventType]);
+
+  const handlePaymentSuccess = async (paymentIntentId: string) => {
     // No client-side Firestore write. The Stripe webhook is the single
     // source of truth — it verifies the payment signature, then creates
     // the booking_inquiries doc from Stripe metadata and pushes to
     // Hospitable. This eliminates the forged-PI-id and replay attack
     // surface that direct client writes would create.
+    trackBookingPaid(paymentIntentId, chargeAmount, eventTypeFromForm(form.eventType));
     setSubmitted(true);
   };
 

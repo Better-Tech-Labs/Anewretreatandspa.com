@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import AudienceExitLink from "@/components/AudienceExitLink";
 import { track } from "@/lib/analytics";
+import { INQUIRE_PATH, inquireHref } from "@/lib/inquire";
+import { useAudience } from "@/lib/useAudience";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const audience = useAudience();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,8 +82,10 @@ export default function Footer() {
               {[
                 { label: "The Estate", href: "/venue" },
                 { label: "Experiences", href: "/experiences" },
+                { label: "Corporate Retreats", href: "/corporate-retreats" },
                 { label: "Gallery", href: "/gallery" },
                 { label: "Book", href: "/booking" },
+                { label: "Inquire", href: INQUIRE_PATH },
               ].map((link) => (
                 <Link
                   key={link.label}
@@ -97,7 +103,7 @@ export default function Footer() {
             <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-6">Gather</p>
             <div className="flex flex-col gap-3">
               {[
-                { label: "Weddings", href: "/booking" },
+                { label: "Weddings", href: inquireHref("Wedding") },
                 { label: "Wellness Retreats", href: "/experiences" },
                 { label: "Corporate Retreats", href: "/experiences" },
                 { label: "Private Dining", href: "/experiences" },
@@ -125,6 +131,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Way out of an audience layout, shown only to visitors who are in one */}
+      {audience && (
+        <div className="border-t border-white/10">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-6">
+            <AudienceExitLink tone="light" className="text-center sm:text-left" />
+          </div>
+        </div>
+      )}
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">

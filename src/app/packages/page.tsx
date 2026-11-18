@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Check, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
+import InquireLink from "@/components/InquireLink";
 
 const packages = [
   {
@@ -202,6 +203,7 @@ export default function PackagesPage() {
               </AnimatedSection>
             ))}
           </div>
+          <InquireLink lead="Want any of these?" className="text-center mt-10">Add them in your inquiry</InquireLink>
         </div>
       </section>
 
@@ -238,6 +240,7 @@ export default function PackagesPage() {
               </div>
             ))}
           </div>
+          <InquireLink lead="Didn't see your question?" className="text-center mt-10">Ask us directly</InquireLink>
         </div>
       </section>
 

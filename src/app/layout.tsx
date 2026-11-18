@@ -10,6 +10,8 @@ import PageTransition from "@/components/PageTransition";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import AnalyticsListeners from "@/components/AnalyticsListeners";
 import MicrosoftClarity from "@/components/MicrosoftClarity";
+import AudienceTracker from "@/components/AudienceTracker";
+import { HOME_REDIRECT_SCRIPT } from "@/lib/audience";
 import { SITE_URL, pageMeta } from "@/lib/seo";
 
 
@@ -44,6 +46,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Sends returning audience visitors from "/" to their landing page before anything is drawn.
+            Static string built from constants in src/lib/audience.ts; no visitor input reaches it. */}
+        <script dangerouslySetInnerHTML={{ __html: HOME_REDIRECT_SCRIPT }} />
+      </head>
       <body
         className={`${cormorant.variable} ${lato.variable} font-sans antialiased`}
       >
@@ -58,6 +65,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <AnalyticsListeners />
         <MicrosoftClarity />
+        <AudienceTracker />
       </body>
     </html>
   );
