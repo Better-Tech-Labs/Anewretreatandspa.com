@@ -4,6 +4,7 @@
  */
 
 import { readAudience, type Audience } from "./audience.ts";
+import { LANDING_PAGES } from "./landingPages.ts";
 
 export type EventType = "wedding" | "corporate" | "spa" | "dining" | "general";
 
@@ -18,9 +19,10 @@ declare global {
 
 const PATH_EVENT_TYPES: { prefix: string; type: EventType }[] = [
   { prefix: "/packages", type: "wedding" },
-  { prefix: "/corporate-retreats", type: "corporate" },
   { prefix: "/experiences", type: "spa" },
   { prefix: "/chefs", type: "dining" },
+  // Each occasion landing page reports under its own bucket.
+  ...LANDING_PAGES.map((page) => ({ prefix: page.path, type: page.analytics })),
 ];
 
 const FORM_EVENT_TYPES: Record<string, EventType> = {

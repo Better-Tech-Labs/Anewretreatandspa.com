@@ -9,6 +9,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { logOut } from "@/lib/auth";
 import AuthModal from "@/components/AuthModal";
 import { homeHrefFor } from "@/lib/audience";
+import { LANDING_PATHS } from "@/lib/landingPages";
 import { useAudience } from "@/lib/useAudience";
 
 const leftNavLinks = [
@@ -35,7 +36,7 @@ export default function Navbar() {
   const homeHref = homeHrefFor(audience);
 
   // Pages with dark hero images where white nav text works
-  const darkHeroPages = ["/", "/venue", "/experiences", "/gallery", "/packages", "/boutique", "/booking", "/corporate-retreats"];
+  const darkHeroPages = ["/", "/venue", "/experiences", "/gallery", "/packages", "/boutique", "/booking", ...LANDING_PATHS];
   const hasDarkHero = darkHeroPages.includes(pathname);
   const useDarkText = scrolled || !hasDarkHero;
 

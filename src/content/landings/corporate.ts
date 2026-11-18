@@ -19,22 +19,20 @@ import type { RoomsContent } from "@/components/home/RoomsGrid";
 import type { SampleDayContent } from "@/components/home/SampleDay";
 import type { SplitFeatureContent } from "@/components/home/SplitFeature";
 import type { StickyBarContent } from "@/components/home/StickyBookingBar";
+import { SPACES_ANCHOR, type LandingContent } from "@/components/landing/LandingPage";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/contact";
 import { inquireHref } from "@/lib/inquire";
 
 /** Must match an entry in EVENT_TYPES so the inquiry form and links accept it. */
 export const EVENT_TYPE = "Corporate Retreat";
 
-/** Anchors on the page itself. */
-export const INQUIRE_ANCHOR = "inquire";
-export const SPACES_ANCHOR = "spaces";
 /** Every "Inquire" button goes to the inquiry page, with Corporate Retreat already chosen. */
 const INQUIRE_HREF = inquireHref(EVENT_TYPE);
 
 export const meta = {
-  title: "Corporate Retreats near Seattle | Private Estate in Kenmore, WA | ANEW",
+  title: "Corporate Retreats near Seattle | Private Estate | ANEW",
   description:
-    "Host your corporate retreat or team offsite at ANEW, a private 7-bedroom estate and spa in Kenmore, WA. Meeting spaces, private chefs, sauna and cold plunge.",
+    "Host your corporate retreat or team offsite at ANEW, a private estate and spa in Kenmore, WA. Meeting spaces, private chefs, sauna and cold plunge.",
   path: "/corporate-retreats",
 };
 
@@ -216,4 +214,25 @@ export const stickyBar: StickyBarContent = {
   note: "Private estate",
   secondaryCta: { label: "Call", href: PHONE_HREF },
   cta: { label: "Inquire", href: INQUIRE_HREF },
+};
+
+/** The whole page, in the shape the shared landing layout takes. */
+export const corporateLanding: LandingContent = {
+  meta,
+  hero,
+  intro,
+  pitch: estate,
+  band: forestBand,
+  spaces,
+  day: sampleDay,
+  extra: wellness,
+  diningBand,
+  dine,
+  formats,
+  availability,
+  faq,
+  gallery,
+  closingCta,
+  inquiry,
+  stickyBar,
 };

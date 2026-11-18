@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import AudienceExitLink from "@/components/AudienceExitLink";
 import { track } from "@/lib/analytics";
-import { INQUIRE_PATH, inquireHref } from "@/lib/inquire";
+import { INQUIRE_PATH } from "@/lib/inquire";
 import { useAudience } from "@/lib/useAudience";
 
 export default function Footer() {
@@ -82,8 +82,8 @@ export default function Footer() {
               {[
                 { label: "The Estate", href: "/venue" },
                 { label: "Experiences", href: "/experiences" },
-                { label: "Corporate Retreats", href: "/corporate-retreats" },
                 { label: "Gallery", href: "/gallery" },
+                { label: "Journal", href: "/blog" },
                 { label: "Book", href: "/booking" },
                 { label: "Inquire", href: INQUIRE_PATH },
               ].map((link) => (
@@ -103,10 +103,15 @@ export default function Footer() {
             <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-6">Gather</p>
             <div className="flex flex-col gap-3">
               {[
-                { label: "Weddings", href: inquireHref("Wedding") },
-                { label: "Wellness Retreats", href: "/experiences" },
-                { label: "Corporate Retreats", href: "/experiences" },
-                { label: "Private Dining", href: "/experiences" },
+                { label: "Weddings", href: "/weddings" },
+                { label: "Elopements", href: "/elopements" },
+                { label: "Corporate Retreats", href: "/corporate-retreats" },
+                { label: "Wellness Retreats", href: "/wellness-retreats" },
+                { label: "Bachelorette Parties", href: "/bachelorette-parties" },
+                { label: "Birthday Parties", href: "/birthday-parties" },
+                { label: "Anniversaries", href: "/anniversaries" },
+                { label: "Family Reunions", href: "/family-reunions" },
+                { label: "Private Dinners", href: "/private-dinners" },
                 { label: "Wedding Packages", href: "/packages" },
               ].map((item) => (
                 <Link
