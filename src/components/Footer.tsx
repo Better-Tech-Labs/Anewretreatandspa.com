@@ -7,6 +7,13 @@ import { track } from "@/lib/analytics";
 import { INQUIRE_PATH } from "@/lib/inquire";
 import { useAudience } from "@/lib/useAudience";
 
+const TOWN_LINKS = [
+  { label: "Kenmore", href: "/kenmore-event-venue" },
+  { label: "Bothell", href: "/bothell-event-venue" },
+  { label: "Woodinville", href: "/woodinville-event-venue" },
+  { label: "Kirkland", href: "/kirkland-event-venue" },
+];
+
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -135,6 +142,18 @@ export default function Footer() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Town pages, for visitors and search engines looking by place */}
+      <div className="border-t border-white/10">
+        <nav aria-label="Areas near ANEW" className="max-w-[1400px] mx-auto px-6 lg:px-12 py-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-white/40">
+          <span className="tracking-[0.25em] uppercase text-white/30">Near you</span>
+          {TOWN_LINKS.map((town) => (
+            <Link key={town.href} href={town.href} className="hover:text-accent transition-colors duration-300">
+              {town.label}
+            </Link>
+          ))}
+        </nav>
       </div>
 
       {/* Way out of an audience layout, shown only to visitors who are in one */}
