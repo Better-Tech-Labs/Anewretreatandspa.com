@@ -23,6 +23,11 @@ export const LANDING_PAGES: readonly LandingPageRef[] = [
   { path: "/bachelorette-parties", analytics: "spa", priority: 0.8 },
   { path: "/family-reunions", analytics: "general", priority: 0.8 },
   { path: "/private-dinners", analytics: "dining", priority: 0.8 },
+  // Town pages: every occasion, aimed at people searching by place.
+  { path: "/kenmore-event-venue", analytics: "general", priority: 0.7 },
+  { path: "/bothell-event-venue", analytics: "general", priority: 0.7 },
+  { path: "/woodinville-event-venue", analytics: "general", priority: 0.7 },
+  { path: "/kirkland-event-venue", analytics: "general", priority: 0.7 },
 ];
 
 export const LANDING_PATHS: readonly string[] = LANDING_PAGES.map((page) => page.path);

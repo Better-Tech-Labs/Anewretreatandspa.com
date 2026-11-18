@@ -149,6 +149,15 @@ test("landing page paths are unique and well formed", () => {
   for (const path of paths) assert.match(path, /^\/[a-z-]+$/);
 });
 
+test("no landing path is a prefix of another, so analytics buckets cannot be confused", () => {
+  const paths = LANDING_PAGES.map((page) => page.path);
+  for (const a of paths) {
+    for (const b of paths) {
+      if (a !== b) assert.ok(!b.startsWith(a), `${a} is a prefix of ${b}`);
+    }
+  }
+});
+
 test("existing pages keep their buckets", () => {
   assert.equal(eventTypeForPath("/packages"), "wedding");
   assert.equal(eventTypeForPath("/experiences"), "spa");
