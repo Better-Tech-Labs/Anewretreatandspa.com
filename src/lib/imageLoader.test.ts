@@ -16,7 +16,7 @@ test("a request larger than every copy gets the largest one", () => {
 });
 
 test("every width next/image can ask for maps to a copy that exists", () => {
-  for (const width of [160, 320, 480, 828, 1200, 1920]) {
+  for (const width of [160, 320, 480, 640, 750, 828, 1080, 1200, 1920]) {
     const path = optimizedImagePath("/images/creek.webp", width);
     const used = Number(/-(\d+)\.webp$/.exec(path)?.[1]);
     assert.ok(IMAGE_WIDTHS.includes(used), `${width} mapped to missing copy ${used}`);

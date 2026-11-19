@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useId, useState, useRef, useEffect } from "react";
 
 interface BotGuardProps {
   onVerified: () => void;
@@ -31,6 +31,41 @@ export function useBotGuard() {
   };
 
   return { honeypotRef, verified, setVerified, isBot };
+}
+
+interface RobotCheckProps {
+  verified: boolean;
+  onChange: (verified: boolean) => void;
+  /** Padding for the surrounding box, which differs between forms. */
+  className?: string;
+}
+
+/**
+ * The visible "I'm not a robot" tick box used with useBotGuard. A button with
+ * the checkbox role: it is named by its visible label, announces its state,
+ * and toggles with Space, Enter or a click.
+ */
+export function RobotCheck({ verified, onChange, className = "py-3 px-4" }: RobotCheckProps) {
+  const labelId = useId();
+  return (
+    <div className={`flex items-center gap-3 ${className} border border-border bg-cream/30`}>
+      <button
+        type="button"
+        role="checkbox"
+        aria-checked={verified}
+        aria-labelledby={labelId}
+        onClick={() => onChange(!verified)}
+        className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-all ${verified ? "border-green-500 bg-green-500" : "border-border hover:border-dark"}`}
+      >
+        {verified && (
+          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </button>
+      <span id={labelId} className="text-sm text-muted">{verified ? "Verified" : "I'm not a robot"}</span>
+    </div>
+  );
 }
 
 /** Trim user input to a safe maximum length */

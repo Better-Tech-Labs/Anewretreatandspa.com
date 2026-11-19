@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Minus, Plus, CheckCircle2 } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import { useBotGuard } from "@/components/BotGuard";
+import { RobotCheck, useBotGuard } from "@/components/BotGuard";
 import { useAuth } from "@/components/AuthProvider";
 import AuthModal from "@/components/AuthModal";
 import StripePayment from "@/components/StripePayment";
@@ -360,12 +360,7 @@ function BookingPageInner() {
                       </label>
                       {errors.agreeTerms && <p className="text-red-500 text-xs">{errors.agreeTerms}</p>}
 
-                      <div className="flex items-center gap-3 py-4 px-5 border border-border bg-cream/30">
-                        <button type="button" onClick={() => botGuard.setVerified(true)} className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-all ${botGuard.verified ? "border-green-500 bg-green-500" : "border-border hover:border-dark"}`}>
-                          {botGuard.verified && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
-                        </button>
-                        <span className="text-sm text-muted">{botGuard.verified ? "Verified" : "I'm not a robot"}</span>
-                      </div>
+                      <RobotCheck verified={botGuard.verified} onChange={botGuard.setVerified} className="py-4 px-5" />
                       {errors.botGuard && <p className="text-red-500 text-xs">{errors.botGuard}</p>}
                       <div style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, overflow: "hidden" }} aria-hidden="true">
                         <input type="text" name="website" tabIndex={-1} autoComplete="off" onChange={(e) => { botGuard.honeypotRef.current = e.target.value; }} />
