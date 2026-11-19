@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Mountain, TreePine, ShoppingBag, Landmark, CircleDot, Waves } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import InquireLink from "@/components/InquireLink";
+import LocationMap from "@/components/LocationMap";
 
 const categories = [
   {
@@ -126,6 +127,8 @@ export default function LocalPage() {
           ))}
         </div>
       </section>
+
+      <LocationMap className="pt-0 sm:pt-0" />
 
       {/* CTA */}
       <section className="relative h-[50vh] min-h-[350px] flex items-center justify-center">

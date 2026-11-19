@@ -5,6 +5,7 @@ import GalleryPreview from "@/components/home/GalleryPreview";
 import HeroSection from "@/components/home/HeroSection";
 import ImageBand from "@/components/home/ImageBand";
 import IntroSection from "@/components/home/IntroSection";
+import LocationMap from "@/components/LocationMap";
 import OccasionCards from "@/components/home/OccasionCards";
 import RoomsGrid from "@/components/home/RoomsGrid";
 import SplitFeature from "@/components/home/SplitFeature";
@@ -50,6 +51,7 @@ export default function HomePage() {
       <GalleryPreview content={content.gallery} trackName="gallery" />
       <ClosingCta content={content.closingCta} trackName="begin_your_story" />
       <TourSection content={content.tour} id="contact" trackName="visit" />
+      <LocationMap className="pt-0 sm:pt-0" />
       <StickyBookingBar content={content.stickyBar} />
     </>
   );
