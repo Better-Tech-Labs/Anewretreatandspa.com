@@ -117,7 +117,7 @@ export default function TourSection({ content, id, trackName }: TourSectionProps
               <textarea placeholder="Anything we should know? (optional)" rows={3} value={form.message} onChange={setField("message")} className={`${FIELD_CLASS} resize-none`} />
               {/* Bot guard */}
               <div className="flex items-center gap-3 py-3 px-4 border border-border bg-cream/30">
-                <button type="button" onClick={() => bot.setVerified(true)}
+                <button type="button" role="checkbox" aria-checked={bot.verified} aria-label="I'm not a robot" onClick={() => bot.setVerified(true)}
                   className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-all ${bot.verified ? "border-green-500 bg-green-500" : "border-border hover:border-dark"}`}>
                   {bot.verified && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                 </button>

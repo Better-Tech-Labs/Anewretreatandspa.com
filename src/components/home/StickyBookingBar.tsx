@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import InquireLink from "@/components/InquireLink";
+import { prefetchFor } from "@/lib/links";
 import type { CtaLink } from "./types";
 
 export interface StickyBarContent {
@@ -62,6 +63,7 @@ export default function StickyBookingBar({ content }: { content: StickyBarConten
           )}
           <Link
             href={content.cta.href}
+            prefetch={prefetchFor(content.cta.href)}
             className="text-[10px] tracking-[0.25em] uppercase bg-white text-dark px-5 py-2.5 hover:bg-accent hover:text-white transition-colors"
           >
             {content.cta.label}

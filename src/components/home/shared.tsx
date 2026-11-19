@@ -1,9 +1,10 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import InquireLink from "@/components/InquireLink";
+import { prefetchFor } from "@/lib/links";
 import type { SectionAction } from "./types";
 
-export const EYEBROW_CLASS = "text-[11px] tracking-[0.4em] uppercase text-accent mb-4";
+export const EYEBROW_CLASS = "text-[11px] tracking-[0.4em] uppercase text-accent-deep mb-4";
 
 export const UNDERLINE_LINK_CLASS =
   "text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors duration-300";
@@ -40,8 +41,13 @@ export function SectionActionLink({ action }: { action: SectionAction }) {
     );
   }
   return (
-    <Link href={action.href} className={action.kind === "button" ? SOLID_BUTTON_CLASS : UNDERLINE_LINK_CLASS}>
+    <Link
+      href={action.href}
+      prefetch={prefetchFor(action.href)}
+      className={action.kind === "button" ? SOLID_BUTTON_CLASS : UNDERLINE_LINK_CLASS}
+    >
       {action.label}
+      {action.describes && <span className="sr-only"> about {action.describes}</span>}
     </Link>
   );
 }

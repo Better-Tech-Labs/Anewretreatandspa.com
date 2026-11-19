@@ -96,7 +96,7 @@ export default function VenuePage() {
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-6 lg:gap-0 items-center">
           <AnimatedSection direction="left">
             <div className="relative aspect-[4/5] max-h-[700px]">
-              <Image src="/images/exterior-side.webp" alt="Exterior" fill className="object-cover" />
+              <Image src="/images/exterior-side.webp" alt="Exterior" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection direction="right" className="lg:pl-20 xl:pl-28">
@@ -134,7 +134,7 @@ export default function VenuePage() {
           </AnimatedSection>
           <AnimatedSection direction="right" className="order-1 lg:order-2">
             <div className="relative aspect-[4/5] lg:aspect-[3/4] max-h-[700px]">
-              <Image src="/images/spa-sauna-anew.webp" alt="ANEW Spa & Sauna" fill className="object-cover" />
+              <Image src="/images/spa-sauna-anew.webp" alt="ANEW Spa & Sauna" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             </div>
           </AnimatedSection>
         </div>
@@ -145,7 +145,7 @@ export default function VenuePage() {
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-6 lg:gap-0 items-center">
           <AnimatedSection direction="left">
             <div className="relative aspect-[4/5] lg:aspect-[3/4] max-h-[700px]">
-              <Image src="/images/gym-tonal-wide.webp" alt="ANEW gym with Tonal training systems" fill className="object-cover" />
+              <Image src="/images/gym-tonal-wide.webp" alt="ANEW gym with Tonal training systems" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection direction="right" className="lg:pl-20 xl:pl-28">
@@ -198,7 +198,7 @@ export default function VenuePage() {
               <AnimatedSection key={space.name} delay={i * 0.08}>
                 <div className="w-[340px] sm:w-[400px] group">
                   <div className="relative aspect-[3/4] mb-5 overflow-hidden">
-                    <Image src={space.img} alt={space.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <Image src={space.img} alt={space.name} fill sizes="400px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                     <span className="absolute top-4 right-4 text-[10px] tracking-[0.2em] uppercase bg-white/90 text-dark px-3 py-1">
                       {space.tag}
                     </span>
@@ -292,7 +292,7 @@ export default function VenuePage() {
           <AnimatedSection>
             <h2 className="font-heading text-4xl sm:text-5xl font-normal mb-6">Experience It For Yourself</h2>
             <p className="text-white/85 text-base mb-8 max-w-md mx-auto">Schedule a private tour and discover this exceptional natural oasis in person.</p>
-            <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
+            <Link href="/booking" prefetch={false} className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
               Book a Tour
             </Link>
             <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />

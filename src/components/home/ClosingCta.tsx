@@ -3,6 +3,7 @@ import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import InquireLink from "@/components/InquireLink";
+import { prefetchFor } from "@/lib/links";
 import { Lines } from "./shared";
 import type { CtaLink, SectionImage, SectionTracking } from "./types";
 
@@ -34,12 +35,14 @@ export default function ClosingCta({ content, trackName }: { content: ClosingCta
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={content.primaryCta.href}
+              prefetch={prefetchFor(content.primaryCta.href)}
               className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500"
             >
               {content.primaryCta.label}
             </Link>
             <Link
               href={content.secondaryCta.href}
+              prefetch={prefetchFor(content.secondaryCta.href)}
               className="text-[11px] tracking-[0.3em] uppercase text-white/80 hover:text-white transition-colors duration-300"
             >
               {content.secondaryCta.label}

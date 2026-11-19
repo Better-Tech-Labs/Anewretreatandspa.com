@@ -12,10 +12,13 @@ export interface CtaLink {
   href: string;
 }
 
-/** A call to action under a block of copy. */
+/**
+ * A call to action under a block of copy. `describes` names what a vague label
+ * such as "Learn More" leads to, for screen readers and search engines.
+ */
 export type SectionAction =
-  | { kind: "link"; label: string; href: string }
-  | { kind: "button"; label: string; href: string }
+  | { kind: "link"; label: string; href: string; describes?: string }
+  | { kind: "button"; label: string; href: string; describes?: string }
   | { kind: "inquire"; label: string; inquireType?: string };
 
 /** Hooks read by AnalyticsListeners (section_view and cta_location). */

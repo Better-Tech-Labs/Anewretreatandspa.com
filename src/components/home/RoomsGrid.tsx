@@ -56,7 +56,7 @@ export default function RoomsGrid({ content, id, trackName }: RoomsGridProps) {
                     style={room.position ? { objectPosition: room.position } : undefined}
                   />
                 </div>
-                <h4 className="font-heading text-xl text-dark mb-1">{room.name}</h4>
+                <h3 className="font-heading text-xl text-dark mb-1">{room.name}</h3>
                 <p className="text-sm text-muted leading-relaxed">{room.desc}</p>
               </div>
             </AnimatedSection>

@@ -1,10 +1,9 @@
-"use client";
-
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import InquireLink from "@/components/InquireLink";
+import { prefetchFor } from "@/lib/links";
 import { Lines } from "./shared";
 import type { CtaLink, SectionImage, SectionTracking } from "./types";
 
@@ -31,78 +30,69 @@ const TITLE_SCALE_CLASS: Record<NonNullable<HeroContent["titleScale"]>, string> 
 const SECONDARY_CTA_CLASS =
   "text-[11px] tracking-[0.3em] uppercase text-white/85 hover:text-white transition-colors duration-300";
 
+/** Entrance delays in seconds, in reading order. */
+const DELAY = { eyebrow: 0.2, subtitle: 0.5, price: 0.6, buttons: 0.7, inquire: 0.9, arrow: 1.4 };
+
+/** Sets the start time for the `hero-fade` animation defined in globals.css. */
+function fadeAfter(seconds: number): CSSProperties {
+  return { "--hero-delay": `${seconds}s` } as CSSProperties;
+}
+
+/**
+ * The entrance is CSS only (see `.hero-fade` and `.hero-rise` in globals.css),
+ * so the headline is on screen as soon as the HTML arrives. It used to wait
+ * for JavaScript, which left the page blank for many seconds on slow phones.
+ * The headline never starts transparent, so browsers count it as painted at once.
+ */
 export default function HeroSection({ content, trackName }: { content: HeroContent } & SectionTracking) {
   return (
     <section data-track-section={trackName} className="relative h-screen flex items-center justify-center overflow-hidden ken-burns">
       <Image src={content.image.src} alt={content.image.alt} fill sizes="100vw" className="object-cover" priority />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
       <div className="relative z-10 text-center text-white px-6 max-w-5xl">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, delay: 0.3 }}
-          className="text-[10px] sm:text-[12px] tracking-[0.3em] sm:tracking-[0.6em] uppercase mb-8 text-white/80"
+        <p
+          style={fadeAfter(DELAY.eyebrow)}
+          className="hero-fade text-[10px] sm:text-[12px] tracking-[0.3em] sm:tracking-[0.6em] uppercase mb-8 text-white/80"
         >
           {content.eyebrow}
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, delay: 0.6 }}
-          className={`font-heading ${TITLE_SCALE_CLASS[content.titleScale ?? "display"]} mb-8 font-normal tracking-tight`}
-        >
+        </p>
+        <h1 className={`hero-rise font-heading ${TITLE_SCALE_CLASS[content.titleScale ?? "display"]} mb-8 font-normal tracking-tight`}>
           <Lines lines={content.titleLines} />
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className={`text-white/85 text-sm sm:text-base ${content.priceNote ? "mb-2" : "mb-8"} max-w-lg mx-auto leading-relaxed`}
+        </h1>
+        <p
+          style={fadeAfter(DELAY.subtitle)}
+          className={`hero-fade text-white/85 text-sm sm:text-base ${content.priceNote ? "mb-2" : "mb-8"} max-w-lg mx-auto leading-relaxed`}
         >
           {content.subtitle}
-        </motion.p>
+        </p>
         {content.priceNote && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.1 }}
-            className="text-white/75 text-xs tracking-[0.2em] uppercase mt-2 mb-8"
-          >
+          <p style={fadeAfter(DELAY.price)} className="hero-fade text-white/75 text-xs tracking-[0.2em] uppercase mt-2 mb-8">
             {content.priceNote}
-          </motion.p>
+          </p>
         )}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
+        <div style={fadeAfter(DELAY.buttons)} className="hero-fade flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href={content.primaryCta.href}
+            prefetch={prefetchFor(content.primaryCta.href)}
             className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500"
           >
             {content.primaryCta.label}
           </Link>
           {content.secondaryCtas.map((cta) => (
-            <Link key={cta.href} href={cta.href} className={SECONDARY_CTA_CLASS}>
+            <Link key={cta.href} href={cta.href} prefetch={prefetchFor(cta.href)} className={SECONDARY_CTA_CLASS}>
               {cta.label}
             </Link>
           ))}
-        </motion.div>
+        </div>
         {content.inquireLead && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.4 }}>
+          <div style={fadeAfter(DELAY.inquire)} className="hero-fade">
             <InquireLink tone="light" lead={content.inquireLead} type={content.inquireType} className="mt-7" />
-          </motion.div>
+          </div>
         )}
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <ChevronDown className="w-5 h-5 text-white/40 animate-bounce" />
-      </motion.div>
+      <div style={fadeAfter(DELAY.arrow)} className="hero-fade absolute bottom-10 left-1/2 -translate-x-1/2">
+        <ChevronDown className="w-5 h-5 text-white/40 animate-bounce" aria-hidden="true" />
+      </div>
     </section>
   );
 }

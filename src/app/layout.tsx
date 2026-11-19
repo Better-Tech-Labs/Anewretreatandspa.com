@@ -12,7 +12,9 @@ import AnalyticsListeners from "@/components/AnalyticsListeners";
 import MicrosoftClarity from "@/components/MicrosoftClarity";
 import AudienceTracker from "@/components/AudienceTracker";
 import { HOME_REDIRECT_SCRIPT } from "@/lib/audience";
-import { SITE_URL, pageMeta } from "@/lib/seo";
+import { CONTACT_EMAIL, PHONE_E164, SOCIAL_PROFILES } from "@/lib/contact";
+import { SITE_NAME, SITE_URL, pageMeta } from "@/lib/seo";
+import { businessSchema, jsonLd } from "@/lib/structuredData";
 
 
 const cormorant = Cormorant_Garamond({
@@ -39,6 +41,25 @@ export const metadata: Metadata = {
   }),
 };
 
+/** Who and where the business is, for search engines. Facts here must match the site and the Google Business Profile. */
+const BUSINESS_JSON_LD = jsonLd(
+  businessSchema({
+    siteUrl: SITE_URL,
+    name: SITE_NAME,
+    description:
+      "A private 7-bedroom estate and spa on two wooded acres in Kenmore, Washington, for weddings, corporate retreats, wellness retreats and private gatherings.",
+    telephone: PHONE_E164,
+    email: CONTACT_EMAIL,
+    imagePath: "/images/exterior-hero.webp",
+    locality: "Kenmore",
+    region: "WA",
+    country: "US",
+    areasServed: ["Kenmore", "Bothell", "Woodinville", "Kirkland", "Seattle"],
+    amenities: ["Sauna", "Cold plunge", "Soaking tub", "Gym", "Fire pit", "Chef's kitchen"],
+    profiles: SOCIAL_PROFILES,
+  }),
+);
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -62,6 +83,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </AuthProvider>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: BUSINESS_JSON_LD }} />
         <GoogleAnalytics />
         <AnalyticsListeners />
         <MicrosoftClarity />

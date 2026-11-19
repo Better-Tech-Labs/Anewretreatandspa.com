@@ -12,6 +12,8 @@ import RoomsGrid, { type RoomsContent } from "@/components/home/RoomsGrid";
 import SampleDay, { type SampleDayContent } from "@/components/home/SampleDay";
 import SplitFeature, { type SplitFeatureContent } from "@/components/home/SplitFeature";
 import StickyBookingBar, { type StickyBarContent } from "@/components/home/StickyBookingBar";
+import { SITE_URL } from "@/lib/seo";
+import { breadcrumbSchema, jsonLd } from "@/lib/structuredData";
 
 /** Anchors every landing page shares, so content files can link to them. */
 export const SPACES_ANCHOR = "spaces";
@@ -54,9 +56,20 @@ interface LandingPageProps {
 }
 
 /** The shared layout for occasion landing pages: the homepage's blocks in a fixed order. */
+/** "Small Wedding Venue near Seattle | Private Estate | ANEW" -> "Small Wedding Venue near Seattle". */
+function pageName(title: string): string {
+  return title.split(" | ")[0];
+}
+
 export default function LandingPage({ content, formatsFootnote }: LandingPageProps) {
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: pageName(content.meta.title), path: content.meta.path },
+  ];
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema(SITE_URL, crumbs)) }} />
       <HeroSection content={content.hero} trackName="hero" />
       <IntroSection content={content.intro} trackName="intro" />
       <SplitFeature content={content.pitch} imageSide="left" sectionClassName="px-6 pb-32 sm:pb-44" trackName="pitch" />

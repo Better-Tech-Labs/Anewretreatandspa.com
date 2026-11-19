@@ -9,7 +9,7 @@ import { blogPosts, findPost } from "@/content/blog";
 import type { BlogPost } from "@/content/blog/types";
 import { formatPostDate, readingMinutes } from "@/lib/blog";
 import { SITE_NAME, SITE_URL, pageMeta } from "@/lib/seo";
-import { faqPageSchema, jsonLd } from "@/lib/structuredData";
+import { breadcrumbSchema, faqPageSchema, jsonLd } from "@/lib/structuredData";
 
 /** Only the articles listed in src/content/blog exist; anything else is a 404. */
 export const dynamicParams = false;
@@ -59,12 +59,24 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <article className="pt-36 sm:pt-44 pb-28">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleSchema(post)) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd(
+            breadcrumbSchema(SITE_URL, [
+              { name: "Home", path: "/" },
+              { name: "Journal", path: "/blog" },
+              { name: post.title, path: `/blog/${post.slug}` },
+            ]),
+          ),
+        }}
+      />
       {post.faqs && post.faqs.length > 0 && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqPageSchema(post.faqs)) }} />
       )}
 
       <header className="px-6 max-w-3xl mx-auto text-center mb-12 sm:mb-16">
-        <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-6">
+        <p className="text-[11px] tracking-[0.3em] uppercase text-accent-deep mb-6">
           <Link href="/blog" className="hover:text-dark transition-colors">Journal</Link>
           <span aria-hidden="true" className="text-border mx-2">/</span>
           {post.category}
@@ -145,7 +157,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       {related.length > 0 && (
         <section aria-labelledby="keep-reading" className="px-6 max-w-5xl mx-auto mt-24 pt-16 border-t border-border">
-          <h2 id="keep-reading" className="text-[11px] tracking-[0.4em] uppercase text-accent mb-12">Keep reading</h2>
+          <h2 id="keep-reading" className="text-[11px] tracking-[0.4em] uppercase text-accent-deep mb-12">Keep reading</h2>
           <div className="grid sm:grid-cols-2 gap-x-10 gap-y-16">
             {related.map((other) => (
               <PostCard key={other.slug} post={other} />

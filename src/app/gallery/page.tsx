@@ -199,6 +199,7 @@ export default function GalleryPage() {
                       src={img.src}
                       alt={img.alt}
                       fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
@@ -250,7 +251,7 @@ export default function GalleryPage() {
             <h2 className="font-heading text-3xl text-dark mb-4 font-normal">Ready to See It in Person?</h2>
             <p className="text-muted text-sm mb-8">Photos only tell half the story.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
+              <Link href="/booking" prefetch={false} className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
                 Plan Your Event
               </Link>
               <Link href="/#contact" className="text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors">
