@@ -12,7 +12,7 @@ import AnalyticsListeners from "@/components/AnalyticsListeners";
 import MicrosoftClarity from "@/components/MicrosoftClarity";
 import AudienceTracker from "@/components/AudienceTracker";
 import { HOME_REDIRECT_SCRIPT } from "@/lib/audience";
-import { CONTACT_EMAIL, PHONE_E164, SOCIAL_PROFILES } from "@/lib/contact";
+import { ADDRESS, CONTACT_EMAIL, PHONE_E164, SOCIAL_PROFILES } from "@/lib/contact";
 import { SITE_NAME, SITE_URL, pageMeta } from "@/lib/seo";
 import { businessSchema, jsonLd } from "@/lib/structuredData";
 
@@ -51,9 +51,11 @@ const BUSINESS_JSON_LD = jsonLd(
     telephone: PHONE_E164,
     email: CONTACT_EMAIL,
     imagePath: "/images/exterior-hero.webp",
-    locality: "Kenmore",
-    region: "WA",
-    country: "US",
+    streetAddress: ADDRESS.street,
+    locality: ADDRESS.locality,
+    region: ADDRESS.region,
+    postalCode: ADDRESS.postalCode,
+    country: ADDRESS.country,
     areasServed: ["Kenmore", "Bothell", "Woodinville", "Kirkland", "Seattle"],
     amenities: ["Sauna", "Cold plunge", "Soaking tub", "Gym", "Fire pit", "Chef's kitchen"],
     profiles: SOCIAL_PROFILES,
