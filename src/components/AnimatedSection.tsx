@@ -1,80 +1,58 @@
 "use client";
 
-import { useRef, useSyncExternalStore } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 interface AnimatedSectionProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
+  /** Seconds to wait before revealing, for staggering side-by-side cards. */
   delay?: number;
   direction?: "up" | "down" | "left" | "right";
 }
 
-const SLIDE_PX = 40;
-/** On phones a sideways slide would poke past the screen edge, so everything rises instead. */
-const PHONE_SLIDE_PX = 24;
-
-const directionOffsets = {
-  up: { y: SLIDE_PX, x: 0 },
-  down: { y: -SLIDE_PX, x: 0 },
-  left: { x: SLIDE_PX, y: 0 },
-  right: { x: -SLIDE_PX, y: 0 },
-};
-const phoneOffset = { x: 0, y: PHONE_SLIDE_PX };
-
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-/** Below Tailwind's `sm`: one column, where content arrives one piece at a time. */
+/** Below Tailwind's `sm`. Must match the phone rules for `.reveal` in globals.css. */
 const PHONE_QUERY = "(max-width: 639px)";
+/** Desktop waits until the element is 60px into the viewport. */
+const DESKTOP_ROOT_MARGIN = "-60px";
+/** Phones start 160px early, so fast scrolling never outruns the reveal. */
+const PHONE_ROOT_MARGIN = "0px 0px 160px 0px";
 
-function subscribeTo(query: string) {
-  return (onChange: () => void) => {
-    const mq = window.matchMedia(query);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  };
-}
-const subscribeMotion = subscribeTo(REDUCED_MOTION_QUERY);
-const subscribePhone = subscribeTo(PHONE_QUERY);
-const getReducedMotion = () => window.matchMedia(REDUCED_MOTION_QUERY).matches;
-const getIsPhone = () => window.matchMedia(PHONE_QUERY).matches;
-const onServer = () => false;
+/**
+ * Fades and slides its children in the first time they scroll into view.
+ * The motion itself is CSS (`.reveal` in globals.css); this component only
+ * flips `data-visible` when an IntersectionObserver fires. It used to run on
+ * framer-motion, which put that whole library on every page for this one effect.
+ */
+export default function AnimatedSection({ children, className = "", delay = 0, direction = "up" }: AnimatedSectionProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-const DESKTOP_DURATION = 0.7;
-const PHONE_DURATION = 0.45;
-/** Start revealing this far before the element reaches the screen, so fast scrolling never outruns it. */
-const DESKTOP_VIEW_MARGIN = "-60px";
-const PHONE_VIEW_MARGIN = "0px 0px 160px 0px";
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
 
-export default function AnimatedSection({
-  children,
-  className = "",
-  delay = 0,
-  direction = "up",
-}: AnimatedSectionProps) {
-  const ref = useRef(null);
-  const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, onServer);
-  const isPhone = useSyncExternalStore(subscribePhone, getIsPhone, onServer);
-  const isInView = useInView(ref, { once: true, margin: isPhone ? PHONE_VIEW_MARGIN : DESKTOP_VIEW_MARGIN });
-  const offset = isPhone ? phoneOffset : directionOffsets[direction];
-
-  if (reducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
+    const rootMargin = window.matchMedia(PHONE_QUERY).matches ? PHONE_ROOT_MARGIN : DESKTOP_ROOT_MARGIN;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setIsVisible(true);
+        observer.disconnect();
+      },
+      { rootMargin },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: offset.x, y: offset.y }}
-      transition={{
-        duration: isPhone ? PHONE_DURATION : DESKTOP_DURATION,
-        // Stagger delays are for side-by-side cards. In a phone's single column they only make each card late.
-        delay: isPhone ? 0 : delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      }}
-      className={className}
+      data-reveal={direction}
+      data-visible={isVisible ? "" : undefined}
+      style={delay ? ({ "--reveal-delay": `${delay}s` } as CSSProperties) : undefined}
+      className={`reveal ${className}`}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

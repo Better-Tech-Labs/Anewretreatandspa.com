@@ -3,15 +3,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import { ChevronDown, Menu, X, User, Phone } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
-import { logOut } from "@/lib/auth";
-import AuthModal from "@/components/AuthModal";
 import { homeHrefFor } from "@/lib/audience";
 import OccasionsMenu from "@/components/OccasionsMenu";
 import { LANDING_PATHS, OCCASION_LINKS } from "@/lib/landingPages";
 import { useAudience } from "@/lib/useAudience";
+
+// The sign-in window and the sign-in library behind it are only fetched when someone opens it.
+const AuthModal = dynamic(() => import("@/components/AuthModal"), { ssr: false });
+
+/** Seconds between each mobile menu item appearing. */
+const MENU_STAGGER_SECONDS = 0.06;
 
 // The Occasions dropdown sits between these two groups on desktop.
 const leftNavLinksBeforeOccasions = [
@@ -32,6 +36,21 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  // Stays true after the first open so the window can animate out when closed.
+  const [hasOpenedAuth, setHasOpenedAuth] = useState(false);
+  const openAuth = () => {
+    setHasOpenedAuth(true);
+    setAuthOpen(true);
+  };
+  const signOut = async () => {
+    setMobileOpen(false);
+    try {
+      const { logOut } = await import("@/lib/auth");
+      await logOut();
+    } catch (error: unknown) {
+      console.error("Sign out failed", error);
+    }
+  };
   const [mobileOccasionsOpen, setMobileOccasionsOpen] = useState(false);
   const { user } = useAuth();
   const pathname = usePathname();
@@ -111,7 +130,7 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-6">
-                <button onClick={() => setAuthOpen(true)} className={linkClass}>
+                <button onClick={openAuth} className={linkClass}>
                   Sign In
                 </button>
               </div>
@@ -159,24 +178,25 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 bg-dark flex flex-col items-center gap-8 overflow-y-auto px-6 pt-24 pb-12 lg:hidden"
-          >
+      {/* Mobile menu. Always in the page and faded with CSS; `invisible` keeps it out of the tab order while closed. */}
+      <div
+        aria-hidden={!mobileOpen}
+        className={`fixed inset-0 z-40 bg-dark flex flex-col items-center gap-8 overflow-y-auto px-6 pt-24 pb-12 lg:hidden transition-[opacity,visibility] duration-[400ms] ${
+          mobileOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+      >
             {/* Spacers centre the list when it fits and let it scroll from the top when it does not. */}
             <div className="flex-1" aria-hidden="true" />
             {navLinks.map((link, i) => (
-              <motion.div key={link.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+              <div
+                key={link.label}
+                className={mobileOpen ? "menu-item-in" : undefined}
+                style={{ animationDelay: `${i * MENU_STAGGER_SECONDS}s` }}
+              >
                 <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">
                   {link.label}
                 </Link>
-              </motion.div>
+              </div>
             ))}
             <div className="flex flex-col items-center">
               <button
@@ -208,10 +228,10 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link href="/profile" onClick={() => setMobileOpen(false)} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Account</Link>
-                <button onClick={() => { logOut(); setMobileOpen(false); }} className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign Out</button>
+                <button onClick={signOut} className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign Out</button>
               </>
             ) : (
-              <button onClick={() => { setMobileOpen(false); setAuthOpen(true); }} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign In</button>
+              <button onClick={() => { setMobileOpen(false); openAuth(); }} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign In</button>
             )}
             <Link href="/booking" prefetch={false} onClick={() => setMobileOpen(false)} className="text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
               Book Now
@@ -221,11 +241,9 @@ export default function Navbar() {
               Call Us
             </a>
             <div className="flex-1" aria-hidden="true" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      {hasOpenedAuth && <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />}
     </>
   );
 }

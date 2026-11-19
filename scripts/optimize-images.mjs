@@ -4,6 +4,10 @@
  * (src/lib/imageWidths.mjs) and writes them to public/images/_opt.
  * Runs before `npm run dev` and `npm run build`. Copies that are newer than
  * their source are skipped, so repeat runs take a moment.
+ *
+ * The copies are served with a one-year cache (firebase.json), so to change a
+ * photo, save the new one under a NEW file name. Replacing a file in place
+ * leaves returning visitors on the old picture.
  */
 import { mkdir, readdir, stat } from "node:fs/promises";
 import path from "node:path";
