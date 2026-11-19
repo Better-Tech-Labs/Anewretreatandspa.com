@@ -17,6 +17,9 @@ export const ADDRESS = {
 export const MAP_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
   `ANEW Retreat and Spa, ${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`,
 )}`;
+/** Google "Locator Plus" map page for the estate, shown in a frame. Allowed by frame-src in firebase.json. */
+export const MAP_EMBED_SRC =
+  "https://storage.googleapis.com/maps-solutions-6mmvqoyzri/locator-plus/htd6/locator-plus.html";
 /** Official profiles, also linked from the footer. */
 export const SOCIAL_PROFILES = [
   "https://www.instagram.com/anewretreatandspa",
