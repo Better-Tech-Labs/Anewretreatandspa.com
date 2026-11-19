@@ -132,7 +132,7 @@ export default function ExperiencesPage() {
             <AnimatedSection key={exp.title}>
               <div className={`grid lg:grid-cols-2 gap-6 lg:gap-0 items-center`}>
                 <div className={`relative aspect-[4/5] lg:aspect-[3/4] max-h-[600px] zoom-container ${i % 2 === 1 ? "lg:order-2" : ""}`}>
-                  <Image src={exp.image} alt={exp.title} fill className="object-cover" />
+                  <Image src={exp.image} alt={exp.title} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
                 </div>
                 <div className={`${i % 2 === 1 ? "lg:order-1 lg:pr-20 xl:pr-28" : "lg:pl-20 xl:pl-28"}`}>
                   <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">{exp.tagline}</p>
@@ -170,7 +170,7 @@ export default function ExperiencesPage() {
             <p className="text-muted text-base leading-relaxed max-w-lg mx-auto mb-10">
               Mix and match any of our experiences to create the perfect visit. We&apos;ll handle every detail.
             </p>
-            <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-10 py-4 hover:bg-accent transition-colors duration-500">
+            <Link href="/booking" prefetch={false} className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-10 py-4 hover:bg-accent transition-colors duration-500">
               Book Now
             </Link>
             <InquireLink lead="Not sure which to choose?" className="mt-10">Ask us to plan it with you</InquireLink>
@@ -186,7 +186,7 @@ export default function ExperiencesPage() {
           <AnimatedSection>
             <h2 className="font-heading text-4xl sm:text-5xl font-normal mb-4">Begin Anew</h2>
             <p className="text-white/85 text-sm mb-8 max-w-md mx-auto">Where strong foundations begin.</p>
-            <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
+            <Link href="/booking" prefetch={false} className="text-[11px] tracking-[0.3em] uppercase border border-white text-white px-8 py-3.5 hover:bg-white hover:text-dark transition-all duration-500">
               Plan Your Experience
             </Link>
             <InquireLink tone="light" lead="Not ready to book?" className="mt-8" />

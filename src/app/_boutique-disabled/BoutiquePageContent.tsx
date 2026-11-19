@@ -195,7 +195,7 @@ export default function BoutiquePageContent() {
               For purchases or inquiries, contact us directly or ask your event coordinator.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/booking" className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
+              <Link href="/booking" prefetch={false} className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500">
                 Book Your Stay
               </Link>
               <a href="mailto:Admin@anewretreatandspa.com" className="text-[11px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-1 hover:text-accent hover:border-accent transition-colors">

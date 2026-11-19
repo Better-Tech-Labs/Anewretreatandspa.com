@@ -23,3 +23,70 @@ export function faqPageSchema(faqs: readonly QuestionAndAnswer[]): Record<string
     })),
   };
 }
+
+export interface Crumb {
+  name: string;
+  /** Site path starting with "/". */
+  path: string;
+}
+
+/** BreadcrumbList structured data, so search results can show "Home > Weddings" instead of a bare URL. */
+export function breadcrumbSchema(siteUrl: string, crumbs: readonly Crumb[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.path === "/" ? `${siteUrl}/` : `${siteUrl}${crumb.path}`,
+    })),
+  };
+}
+
+export interface BusinessDetails {
+  siteUrl: string;
+  name: string;
+  description: string;
+  /** E.164 phone number, e.g. "+12064711243". */
+  telephone: string;
+  email: string;
+  /** Site path of a representative photo. */
+  imagePath: string;
+  locality: string;
+  region: string;
+  country: string;
+  /** Towns and cities the venue draws guests from. */
+  areasServed: readonly string[];
+  amenities: readonly string[];
+  /** Official profiles on other sites. */
+  profiles: readonly string[];
+}
+
+/**
+ * Tells search engines what the business is and where: an event venue and
+ * local business in Kenmore. The street address is left out on purpose,
+ * because the estate shares arrival details only with confirmed guests.
+ */
+export function businessSchema(details: BusinessDetails): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "EventVenue"],
+    "@id": `${details.siteUrl}/#business`,
+    name: details.name,
+    description: details.description,
+    url: `${details.siteUrl}/`,
+    telephone: details.telephone,
+    email: details.email,
+    image: `${details.siteUrl}${details.imagePath}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: details.locality,
+      addressRegion: details.region,
+      addressCountry: details.country,
+    },
+    areaServed: details.areasServed.map((name) => ({ "@type": "City", name })),
+    amenityFeature: details.amenities.map((name) => ({ "@type": "LocationFeatureSpecification", name, value: true })),
+    sameAs: details.profiles,
+  };
+}

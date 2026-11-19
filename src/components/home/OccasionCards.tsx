@@ -5,6 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import CornerAccent from "@/components/CornerAccent";
 import HandDrawnDivider from "@/components/HandDrawnDivider";
 import InquireLink from "@/components/InquireLink";
+import { prefetchFor } from "@/lib/links";
 import { EYEBROW_CLASS } from "./shared";
 import type { SectionTracking } from "./types";
 
@@ -61,15 +62,16 @@ export default function OccasionCards({ content, footnote, trackName }: Occasion
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <h4 className="font-heading text-2xl text-dark mb-3">{card.title}</h4>
+                <h3 className="font-heading text-2xl text-dark mb-3">{card.title}</h3>
                 <p className="text-muted text-sm leading-relaxed mb-4">{card.desc}</p>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                   {card.href && (
                     <Link
                       href={card.href}
+                      prefetch={prefetchFor(card.href)}
                       className="text-[10px] tracking-[0.3em] uppercase text-dark border-b border-dark pb-0.5 hover:text-accent hover:border-accent transition-colors"
                     >
-                      Learn More
+                      Learn More<span className="sr-only"> about {card.title}</span>
                     </Link>
                   )}
                   <InquireLink variant="label" size="sm" type={card.inquireType}>

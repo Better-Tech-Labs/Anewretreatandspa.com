@@ -11,7 +11,7 @@ interface PostCardProps {
 
 function PostMeta({ post }: { post: BlogPost }) {
   return (
-    <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-4">
+    <p className="text-[11px] tracking-[0.3em] uppercase text-accent-deep mb-4">
       {post.category} <span aria-hidden="true" className="text-border mx-1">/</span>{" "}
       <time dateTime={post.date} className="text-muted">{formatPostDate(post.date)}</time>
     </p>

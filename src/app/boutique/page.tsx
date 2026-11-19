@@ -118,6 +118,7 @@ export default function BoutiquePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/booking"
+                prefetch={false}
                 className="text-[11px] tracking-[0.3em] uppercase bg-dark text-white px-8 py-3.5 hover:bg-accent transition-colors duration-500"
               >
                 Book Your Stay

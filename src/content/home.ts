@@ -112,7 +112,7 @@ export const dine: SplitFeatureContent = {
   ],
   actions: [
     { kind: "button", label: "Book a Chef", href: "/inquire" },
-    { kind: "link", label: "Learn More", href: BOOKING_HREF },
+    { kind: "link", label: "Learn More", href: BOOKING_HREF, describes: "booking the estate with a private chef" },
   ],
 };
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import AudienceExitLink from "@/components/AudienceExitLink";
 import { track } from "@/lib/analytics";
 import { INQUIRE_PATH } from "@/lib/inquire";
+import { prefetchFor } from "@/lib/links";
 import { useAudience } from "@/lib/useAudience";
 
 const TOWN_LINKS = [
@@ -97,6 +98,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   href={link.href}
+                  prefetch={prefetchFor(link.href)}
                   className="text-sm text-white/50 hover:text-accent transition-colors duration-300"
                 >
                   {link.label}

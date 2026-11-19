@@ -4,20 +4,22 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User, Phone } from "lucide-react";
+import { ChevronDown, Menu, X, User, Phone } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { logOut } from "@/lib/auth";
 import AuthModal from "@/components/AuthModal";
 import { homeHrefFor } from "@/lib/audience";
-import { LANDING_PATHS } from "@/lib/landingPages";
+import OccasionsMenu from "@/components/OccasionsMenu";
+import { LANDING_PATHS, OCCASION_LINKS } from "@/lib/landingPages";
 import { useAudience } from "@/lib/useAudience";
 
-const leftNavLinks = [
+// The Occasions dropdown sits between these two groups on desktop.
+const leftNavLinksBeforeOccasions = [
   { label: "About", href: "/venue" },
   { label: "Experiences", href: "/experiences" },
-  { label: "Weddings", href: "/packages" },
-  { label: "Boutique", href: "/boutique" },
 ];
+const leftNavLinksAfterOccasions = [{ label: "Boutique", href: "/boutique" }];
+const leftNavLinks = [...leftNavLinksBeforeOccasions, ...leftNavLinksAfterOccasions];
 
 const rightNavLinks = [
   { label: "Gallery", href: "/gallery" },
@@ -30,6 +32,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [mobileOccasionsOpen, setMobileOccasionsOpen] = useState(false);
   const { user } = useAuth();
   const pathname = usePathname();
   const audience = useAudience();
@@ -67,7 +70,13 @@ export default function Navbar() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-8 xl:gap-x-12">
           {/* Left nav (desktop) */}
           <div className="col-start-1 hidden lg:flex items-center justify-end gap-5 xl:gap-8">
-            {leftNavLinks.map((link) => (
+            {leftNavLinksBeforeOccasions.map((link) => (
+              <Link key={link.label} href={link.href} className={linkClass}>
+                {link.label}
+              </Link>
+            ))}
+            <OccasionsMenu triggerClassName={linkClass} />
+            {leftNavLinksAfterOccasions.map((link) => (
               <Link key={link.label} href={link.href} className={linkClass}>
                 {link.label}
               </Link>
@@ -111,6 +120,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2 xl:gap-3 ml-auto mr-4">
               <Link
                 href="/booking"
+                prefetch={false}
                 className={`whitespace-nowrap text-[11px] tracking-[0.25em] uppercase font-light border px-4 xl:px-5 py-2.5 transition-all duration-300 ${
                   useDarkText
                     ? "border-dark text-dark hover:bg-dark hover:text-white"
@@ -136,7 +146,11 @@ export default function Navbar() {
 
           {/* Mobile toggle */}
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => {
+              setMobileOpen(!mobileOpen);
+              // Start collapsed each time the menu is opened.
+              setMobileOccasionsOpen(false);
+            }}
             className={`col-start-3 justify-self-end lg:hidden transition-colors ${useDarkText ? "text-dark" : "text-white"}`}
             aria-label="Menu"
           >
@@ -153,8 +167,10 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 bg-dark flex flex-col items-center justify-center gap-8 lg:hidden"
+            className="fixed inset-0 z-40 bg-dark flex flex-col items-center gap-8 overflow-y-auto px-6 pt-24 pb-12 lg:hidden"
           >
+            {/* Spacers centre the list when it fits and let it scroll from the top when it does not. */}
+            <div className="flex-1" aria-hidden="true" />
             {navLinks.map((link, i) => (
               <motion.div key={link.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                 <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">
@@ -162,6 +178,33 @@ export default function Navbar() {
                 </Link>
               </motion.div>
             ))}
+            <div className="flex flex-col items-center">
+              <button
+                type="button"
+                aria-expanded={mobileOccasionsOpen}
+                aria-controls="mobile-occasions"
+                onClick={() => setMobileOccasionsOpen((open) => !open)}
+                className="inline-flex items-center gap-2 text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors"
+              >
+                Occasions
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${mobileOccasionsOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+              </button>
+              {mobileOccasionsOpen && (
+                <ul id="mobile-occasions" className="mt-5 flex flex-col items-center gap-4">
+                  {OCCASION_LINKS.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="text-white/70 text-[11px] tracking-[0.25em] uppercase font-light hover:text-accent transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
             {user ? (
               <>
                 <Link href="/profile" onClick={() => setMobileOpen(false)} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Account</Link>
@@ -170,13 +213,14 @@ export default function Navbar() {
             ) : (
               <button onClick={() => { setMobileOpen(false); setAuthOpen(true); }} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign In</button>
             )}
-            <Link href="/booking" onClick={() => setMobileOpen(false)} className="text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
+            <Link href="/booking" prefetch={false} onClick={() => setMobileOpen(false)} className="text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
               Book Now
             </Link>
             <a href="tel:+12064711243" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
               <Phone className="w-4 h-4" />
               Call Us
             </a>
+            <div className="flex-1" aria-hidden="true" />
           </motion.div>
         )}
       </AnimatePresence>

@@ -31,3 +31,17 @@ export const LANDING_PAGES: readonly LandingPageRef[] = [
 ];
 
 export const LANDING_PATHS: readonly string[] = LANDING_PAGES.map((page) => page.path);
+
+/** The header's Occasions menu: every occasion page, in the order visitors ask for them. */
+export const OCCASION_LINKS: readonly { label: string; href: string }[] = [
+  { label: "Weddings", href: "/weddings" },
+  { label: "Elopements", href: "/elopements" },
+  { label: "Corporate Retreats", href: "/corporate-retreats" },
+  { label: "Wellness Retreats", href: "/wellness-retreats" },
+  { label: "Bachelorette Parties", href: "/bachelorette-parties" },
+  { label: "Birthday Parties", href: "/birthday-parties" },
+  { label: "Anniversaries", href: "/anniversaries" },
+  { label: "Family Reunions", href: "/family-reunions" },
+  { label: "Private Dinners", href: "/private-dinners" },
+  { label: "Wedding Packages", href: "/packages" },
+];

@@ -113,7 +113,7 @@ export default function InquiryForm({ eventType, onSent, className = "" }: Inqui
 
         <div className="space-y-3 text-center">
           <p className="text-xs text-muted">
-            Goes straight to our host. Ready to book instantly instead? <Link href="/booking" className={LINK}>Book the estate</Link>
+            Goes straight to our host. Ready to book instantly instead? <Link href="/booking" prefetch={false} className={LINK}>Book the estate</Link>
           </p>
           {RECAPTCHA_ENABLED && (
             <p className="text-[10px] text-muted/80">
