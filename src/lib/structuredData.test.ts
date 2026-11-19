@@ -26,7 +26,7 @@ test("breadcrumbs are numbered from 1 with absolute URLs", () => {
   ]);
 });
 
-test("business schema carries contact details, town and service areas, and no street address", () => {
+test("business schema carries contact details, full postal address and service areas", () => {
   const schema = businessSchema({
     siteUrl: SITE,
     name: "ANEW",
@@ -34,8 +34,10 @@ test("business schema carries contact details, town and service areas, and no st
     telephone: "+12065550100",
     email: "hello@example.com",
     imagePath: "/images/a.webp",
+    streetAddress: "1 Example Rd",
     locality: "Kenmore",
     region: "WA",
+    postalCode: "98028",
     country: "US",
     areasServed: ["Kenmore", "Bothell"],
     amenities: ["Sauna"],
@@ -44,6 +46,7 @@ test("business schema carries contact details, town and service areas, and no st
   assert.equal(schema["@id"], "https://example.com/#business");
   assert.equal(schema.image, "https://example.com/images/a.webp");
   assert.equal(schema.address.addressLocality, "Kenmore");
-  assert.equal("streetAddress" in schema.address, false);
+  assert.equal(schema.address.streetAddress, "1 Example Rd");
+  assert.equal(schema.address.postalCode, "98028");
   assert.deepEqual(schema.areaServed.map((area) => area.name), ["Kenmore", "Bothell"]);
 });

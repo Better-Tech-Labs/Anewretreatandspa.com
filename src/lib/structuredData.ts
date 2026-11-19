@@ -53,8 +53,10 @@ export interface BusinessDetails {
   email: string;
   /** Site path of a representative photo. */
   imagePath: string;
+  streetAddress: string;
   locality: string;
   region: string;
+  postalCode: string;
   country: string;
   /** Towns and cities the venue draws guests from. */
   areasServed: readonly string[];
@@ -81,8 +83,10 @@ export function businessSchema(details: BusinessDetails): Record<string, unknown
     image: `${details.siteUrl}${details.imagePath}`,
     address: {
       "@type": "PostalAddress",
+      streetAddress: details.streetAddress,
       addressLocality: details.locality,
       addressRegion: details.region,
+      postalCode: details.postalCode,
       addressCountry: details.country,
     },
     areaServed: details.areasServed.map((name) => ({ "@type": "City", name })),

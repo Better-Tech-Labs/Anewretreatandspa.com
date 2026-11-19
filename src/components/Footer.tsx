@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import AudienceExitLink from "@/components/AudienceExitLink";
 import { track } from "@/lib/analytics";
+import { ADDRESS, MAP_HREF } from "@/lib/contact";
 import { INQUIRE_PATH } from "@/lib/inquire";
 import { prefetchFor } from "@/lib/links";
 import { useAudience } from "@/lib/useAudience";
@@ -138,7 +139,14 @@ export default function Footer() {
           <div>
             <p className="text-[11px] tracking-[0.3em] uppercase text-accent mb-6">Contact</p>
             <div className="flex flex-col gap-3 text-sm text-white/50">
-              <p>Kenmore, WA</p>
+              <a href={MAP_HREF} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                <address className="not-italic">
+                  {ADDRESS.street}
+                  <br />
+                  {ADDRESS.locality}, {ADDRESS.region} {ADDRESS.postalCode}
+                </address>
+                <span className="sr-only"> (opens Google Maps in a new tab)</span>
+              </a>
               <a href="tel:+12064711243" className="hover:text-accent transition-colors">(206) 471-1243</a>
               <a href="mailto:Admin@anewretreatandspa.com" className="hover:text-accent transition-colors">Admin@anewretreatandspa.com</a>
             </div>
