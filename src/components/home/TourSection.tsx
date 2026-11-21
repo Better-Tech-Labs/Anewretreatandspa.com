@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { RobotCheck, useBotGuard } from "@/components/BotGuard";
-import { trackLead } from "@/lib/analytics";
+import { trackFormStart, trackInquirySubmit } from "@/lib/analytics";
 import { EYEBROW_CLASS } from "./shared";
 import type { SectionTracking } from "./types";
 
@@ -26,6 +26,10 @@ const FUNCTIONS_URL =
   process.env.NEXT_PUBLIC_FUNCTIONS_URL ||
   "https://us-central1-bakkers-website-847ba.cloudfunctions.net";
 
+/** Analytics labels for this form (form_location and inquiry_type). */
+const TOUR_FORM_LOCATION = "home_tour";
+const TOUR_INQUIRY_TYPE = "Tour";
+
 const EMPTY_FORM = { firstName: "", lastName: "", email: "", phone: "", date: "", time: "", message: "" };
 
 const FIELD_CLASS =
@@ -40,6 +44,14 @@ export default function TourSection({ content, id, trackName }: TourSectionProps
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bot = useBotGuard();
+  const hasStartedRef = useRef(false);
+
+  /** form_start: once per page view, on the first thing typed. */
+  const handleFirstInput = () => {
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+    trackFormStart(TOUR_FORM_LOCATION, TOUR_INQUIRY_TYPE);
+  };
 
   const setField = (field: keyof typeof EMPTY_FORM) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm({ ...form, [field]: e.target.value });
@@ -66,7 +78,7 @@ export default function TourSection({ content, id, trackName }: TourSectionProps
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Submission failed");
       }
-      trackLead("tour_form");
+      trackInquirySubmit("tour_form", TOUR_FORM_LOCATION, TOUR_INQUIRY_TYPE);
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);
@@ -97,7 +109,7 @@ export default function TourSection({ content, id, trackName }: TourSectionProps
               <p className="text-muted text-sm">We&apos;ll confirm your tour by email within one business day.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} onInput={handleFirstInput} className="space-y-5">
               <div className="grid sm:grid-cols-2 gap-5">
                 <input type="text" placeholder="First Name *" required value={form.firstName} onChange={setField("firstName")} className={FIELD_CLASS} />
                 <input type="text" placeholder="Last Name" value={form.lastName} onChange={setField("lastName")} className={FIELD_CLASS} />

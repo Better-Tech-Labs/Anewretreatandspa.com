@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   dateBounds,
+  dateFromQuery,
   eventTypeFromQuery,
   inquireHref,
   splitName,
@@ -92,4 +93,26 @@ test("past dates and dates beyond the window are rejected", () => {
   assert.ok(validateInquiry({ ...valid, date: "2026-11-16" }, TODAY).date);
   assert.ok(validateInquiry({ ...valid, date: "2030-01-01" }, TODAY).date);
   assert.deepEqual(validateInquiry({ ...valid, date: "2026-11-17" }, TODAY), {});
+});
+
+test("inquireHref carries a calendar date alongside the type", () => {
+  assert.equal(inquireHref("Wedding", "2027-06-12"), "/inquire?type=Wedding&date=2027-06-12");
+  assert.equal(inquireHref(undefined, "2027-06-12"), "/inquire?date=2027-06-12");
+});
+
+test("inquireHref drops a malformed date", () => {
+  assert.equal(inquireHref("Wedding", "June 12"), "/inquire?type=Wedding");
+});
+
+test("dateFromQuery accepts a date the form would accept", () => {
+  const now = new Date(2026, 10, 20);
+  assert.equal(dateFromQuery("?type=Wedding&date=2027-06-12", now), "2027-06-12");
+});
+
+test("dateFromQuery ignores past, far-off, malformed and missing dates", () => {
+  const now = new Date(2026, 10, 20);
+  assert.equal(dateFromQuery("?date=2026-01-01", now), "");
+  assert.equal(dateFromQuery("?date=2040-01-01", now), "");
+  assert.equal(dateFromQuery("?date=%3Cscript%3E", now), "");
+  assert.equal(dateFromQuery("", now), "");
 });

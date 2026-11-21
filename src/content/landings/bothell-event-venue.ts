@@ -185,6 +185,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Event",
   text: "Let us know what you are planning, when, and for roughly how many. Sending the form is free and does not commit you to a booking.",
   eventType: "",
+  formLocation: "bothell_event_venue_bottom",
+  showBookLink: true,
   points: [
     "A personal answer within 24 hours",
     "Straight talk about fit, dates and location",

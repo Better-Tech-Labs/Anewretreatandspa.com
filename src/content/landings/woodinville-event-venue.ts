@@ -182,6 +182,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About the Weekend",
   text: "A few lines is enough: when you are coming, roughly how many people, and whether wine country is part of the plan. There is nothing to pay and nothing to sign at this stage.",
   eventType: "",
+  formLocation: "woodinville_event_venue_bottom",
+  showBookLink: true,
   points: [
     "A reply from a person within 24 hours",
     "The estate held for your group alone",

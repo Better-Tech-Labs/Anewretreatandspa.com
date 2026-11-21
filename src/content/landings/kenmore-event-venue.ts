@@ -190,6 +190,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us What You're Planning",
   text: "A few lines is enough: the occasion, rough dates and about how many people. There is nothing to pay and nothing to sign at this stage.",
   eventType: "",
+  formLocation: "kenmore_event_venue_bottom",
+  showBookLink: true,
   points: [
     "A reply from us within 24 hours",
     "The estate held for your group only",

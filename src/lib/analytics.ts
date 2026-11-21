@@ -94,9 +94,43 @@ const CURRENCY = "USD";
 /** Which form produced the lead. Register `lead_source` as a GA4 custom dimension. */
 export type LeadSource = "inquiry_form" | "tour_form";
 
-/** Key event: a lead the backend accepted. */
-export function trackLead(leadSource: LeadSource, eventType?: EventType): void {
-  track("generate_lead", { lead_source: leadSource, event_type: eventType });
+/**
+ * Where a form sits, e.g. "corporate_hero", "corporate_bottom", "inquire_page".
+ * Register `form_location` and `inquiry_type` as GA4 custom dimensions.
+ */
+export type FormLocation = string;
+
+/** `inquiry_type` when the visitor hasn't said what the event is. */
+const UNSPECIFIED_INQUIRY = "unspecified";
+
+interface FormEventParams extends TrackParams {
+  form_location: FormLocation;
+  inquiry_type: string;
+  event_type: EventType | undefined;
+}
+
+function formParams(formLocation: FormLocation, inquiryType: string | undefined): FormEventParams {
+  return {
+    form_location: formLocation,
+    inquiry_type: inquiryType?.trim() || UNSPECIFIED_INQUIRY,
+    event_type: eventTypeFromForm(inquiryType),
+  };
+}
+
+/** Funnel step: the visitor touched a form. Callers send it once per form per page view. */
+export function trackFormStart(formLocation: FormLocation, inquiryType?: string): void {
+  track("form_start", formParams(formLocation, inquiryType));
+}
+
+/**
+ * A message the backend accepted. Sends the key event (generate_lead) and
+ * inquiry_form_submit with the same parameters, so either can be reported on.
+ * Call it only after the server says yes.
+ */
+export function trackInquirySubmit(leadSource: LeadSource, formLocation: FormLocation, inquiryType?: string): void {
+  const params = { lead_source: leadSource, ...formParams(formLocation, inquiryType) };
+  track("generate_lead", params);
+  track("inquiry_form_submit", params);
 }
 
 /** Funnel step, not a key event: the visitor reached payment with a priced booking. */

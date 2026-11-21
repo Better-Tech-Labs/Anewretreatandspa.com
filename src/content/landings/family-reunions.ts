@@ -160,7 +160,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Find a Date That Works for Everyone",
-  hint: "Choose an open date to start a booking",
+  hint: "Choose an open date to ask about it",
   inquireLead: "Still polling the family on dates?",
   inquireType: EVENT_TYPE,
 };
@@ -204,6 +204,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Family Gathering",
   text: "A few details are enough to start. No payment and no commitment. Share rough dates and group size and we'll reply with what's possible.",
   eventType: EVENT_TYPE,
+  formLocation: "family_reunions_bottom",
+  showBookLink: true,
   points: [
     "A personal reply from the estate",
     "Rooms, meals and group size talked through with you",

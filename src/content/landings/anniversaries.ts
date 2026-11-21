@@ -207,6 +207,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Anniversary",
   text: "Half a minute, nothing to pay, nothing to sign. Tell us which anniversary it is, a date or two that could work, and about how many people you'd bring.",
   eventType: EVENT_TYPE,
+  formLocation: "anniversaries_bottom",
+  showBookLink: true,
   points: [
     "A reply from our team within 24 hours",
     "Ideas for a vow renewal or family dinner",

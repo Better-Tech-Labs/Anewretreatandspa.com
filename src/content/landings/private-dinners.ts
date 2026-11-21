@@ -158,7 +158,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Choose Your Evening",
-  hint: "Select an open date to start a booking",
+  hint: "Select an open date to ask about it",
   inquireLead: "Have a date in mind that isn't showing?",
   inquireType: EVENT_TYPE,
 };
@@ -202,6 +202,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Dinner",
   text: "It takes a minute, with no payment and no commitment. Give us a date, a guest count and the occasion, and we'll reply with how it could work.",
   eventType: EVENT_TYPE,
+  formLocation: "private_dinners_bottom",
+  showBookLink: true,
   points: [
     "A reply from a person, not an auto-responder",
     "The property reserved for your guests alone",

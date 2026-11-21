@@ -207,6 +207,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Wedding",
   text: "It takes about 30 seconds and commits you to nothing. Share the date you're hoping for and roughly how many guests, and we'll tell you what's possible.",
   eventType: EVENT_TYPE,
+  formLocation: "weddings_bottom",
+  showBookLink: true,
   points: [
     "We write back ourselves within 24 hours",
     "Honest answers on guest count and dates",

@@ -1,6 +1,6 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { trackBeginCheckout, trackBookingPaid, trackLead } from "./analytics.ts";
+import { trackBeginCheckout, trackBookingPaid, trackFormStart, trackInquirySubmit } from "./analytics.ts";
 
 type GtagCall = unknown[];
 
@@ -23,22 +23,40 @@ function onlyEvent(): { name: unknown; params: Record<string, unknown> } {
 
 beforeEach(() => setPath("/"));
 
-test("trackLead sends generate_lead with the lead source and event type", () => {
-  setPath("/inquire");
-  trackLead("inquiry_form", "wedding");
-  const { name, params } = onlyEvent();
-  assert.equal(name, "generate_lead");
-  assert.equal(params.lead_source, "inquiry_form");
-  assert.equal(params.event_type, "wedding");
-  assert.equal(params.page_path, "/inquire");
+function eventsNamed(): { name: unknown; params: Record<string, unknown> }[] {
+  return calls.map(([, name, params]) => ({ name, params: params as Record<string, unknown> }));
+}
+
+test("a sent inquiry fires generate_lead and inquiry_form_submit with the same parameters", () => {
+  setPath("/corporate-retreats");
+  trackInquirySubmit("inquiry_form", "corporate_hero", "Corporate Retreat");
+  const events = eventsNamed();
+  assert.deepEqual(events.map((e) => e.name), ["generate_lead", "inquiry_form_submit"]);
+  for (const { params } of events) {
+    assert.equal(params.lead_source, "inquiry_form");
+    assert.equal(params.form_location, "corporate_hero");
+    assert.equal(params.inquiry_type, "Corporate Retreat");
+    assert.equal(params.event_type, "corporate");
+    assert.equal(params.page_path, "/corporate-retreats");
+  }
 });
 
-test("trackLead falls back to the page's event type when none is given", () => {
+test("an inquiry with no type reports unspecified and the page's event type", () => {
   setPath("/corporate-retreats");
-  trackLead("tour_form");
-  const { params } = onlyEvent();
-  assert.equal(params.lead_source, "tour_form");
+  trackInquirySubmit("tour_form", "home_tour");
+  const [{ params }] = eventsNamed();
+  assert.equal(params.inquiry_type, "unspecified");
   assert.equal(params.event_type, "corporate");
+});
+
+test("trackFormStart sends form_start with the form location and inquiry type", () => {
+  setPath("/inquire");
+  trackFormStart("inquire_page", "Wedding");
+  const { name, params } = onlyEvent();
+  assert.equal(name, "form_start");
+  assert.equal(params.form_location, "inquire_page");
+  assert.equal(params.inquiry_type, "Wedding");
+  assert.equal(params.event_type, "wedding");
 });
 
 test("trackBeginCheckout sends begin_checkout with value in USD", () => {
@@ -64,7 +82,7 @@ test("trackBookingPaid sends purchase with transaction id, value and currency", 
 
 test("tracking never throws when gtag is blocked", () => {
   (globalThis as { window?: unknown }).window = { location: { pathname: "/" } };
-  assert.doesNotThrow(() => trackLead("inquiry_form"));
+  assert.doesNotThrow(() => trackInquirySubmit("inquiry_form", "inquire_page"));
 });
 
 // ---------------------------------------------------------------------------
@@ -100,8 +118,8 @@ test("events from a visitor with no audience carry audience general", () => {
 test("conversions carry the audience too", () => {
   setPath("/inquire");
   setCookie("anew_aud=corporate");
-  trackLead("inquiry_form", "corporate");
-  const { name, params } = onlyEvent();
+  trackInquirySubmit("inquiry_form", "corporate_bottom", "Corporate Retreat");
+  const [{ name, params }] = eventsNamed();
   assert.equal(name, "generate_lead");
   assert.equal(params.audience, "corporate");
   clearDocument();
