@@ -159,7 +159,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Find Dates for Your Retreat",
-  hint: "Click an open date to start a booking",
+  hint: "Click an open date to ask about it",
   inquireLead: "Planning a multi-day program or flexible on dates?",
   inquireType: EVENT_TYPE,
 };
@@ -203,6 +203,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Retreat",
   text: "A few quick fields and no payment. Give us rough dates and a headcount, and say whether you're leading the retreat or attending one with friends.",
   eventType: EVENT_TYPE,
+  formLocation: "wellness_retreats_bottom",
+  showBookLink: true,
   points: [
     "A reply from a person within 24 hours",
     "Pricing based on your dates and group",

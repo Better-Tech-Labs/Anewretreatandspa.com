@@ -206,6 +206,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Elopement",
   text: "A few lines is enough. No payment and no obligation. Give us a date, say whether it is the two of you or a small group, and we'll take it from there.",
   eventType: EVENT_TYPE,
+  formLocation: "elopements_bottom",
+  showBookLink: true,
   points: [
     "An answer from a person within 24 hours",
     "Help choosing a ceremony spot",

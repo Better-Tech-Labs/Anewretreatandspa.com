@@ -163,7 +163,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Check Her Weekend",
-  hint: "Click an open date to start a booking",
+  hint: "Click an open date to ask about it",
   inquireLead: "Weekend taken, or still choosing between dates?",
   inquireType: EVENT_TYPE,
 };
@@ -207,6 +207,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About the Bride",
   text: "It's a short form with nothing to pay. Add the weekend you want, your group size, and anything she'd love, and we'll reply with options and pricing.",
   eventType: EVENT_TYPE,
+  formLocation: "bachelorette_parties_bottom",
+  showBookLink: true,
   points: [
     "An answer within 24 hours",
     "One group on the estate at a time",

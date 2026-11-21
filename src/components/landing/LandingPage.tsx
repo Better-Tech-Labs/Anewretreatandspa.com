@@ -12,6 +12,7 @@ import RoomsGrid, { type RoomsContent } from "@/components/home/RoomsGrid";
 import SampleDay, { type SampleDayContent } from "@/components/home/SampleDay";
 import SplitFeature, { type SplitFeatureContent } from "@/components/home/SplitFeature";
 import StickyBookingBar, { type StickyBarContent } from "@/components/home/StickyBookingBar";
+import HeroInquiry, { type HeroFormContent } from "./HeroInquiry";
 import { SITE_URL } from "@/lib/seo";
 import { breadcrumbSchema, jsonLd } from "@/lib/structuredData";
 
@@ -27,6 +28,8 @@ export const INQUIRE_ANCHOR = "inquire";
 export interface LandingContent {
   meta: { title: string; description: string; path: string };
   hero: HeroContent;
+  /** Puts the short inquiry form in the hero. The hero's main button then scrolls to it. */
+  heroForm?: HeroFormContent;
   intro: IntroContent;
   /** The main pitch, beside a photo. */
   pitch: SplitFeatureContent;
@@ -70,7 +73,11 @@ export default function LandingPage({ content, formatsFootnote }: LandingPagePro
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema(SITE_URL, crumbs)) }} />
-      <HeroSection content={content.hero} trackName="hero" />
+      {content.heroForm ? (
+        <HeroInquiry hero={content.hero} form={content.heroForm} trackName="hero" />
+      ) : (
+        <HeroSection content={content.hero} trackName="hero" />
+      )}
       <IntroSection content={content.intro} trackName="intro" />
       <SplitFeature content={content.pitch} imageSide="left" sectionClassName="px-6 pb-32 sm:pb-44" trackName="pitch" />
       {content.band && <ImageBand content={content.band} />}
@@ -97,7 +104,14 @@ export default function LandingPage({ content, formatsFootnote }: LandingPagePro
         />
       )}
       {content.formats && <OccasionCards content={content.formats} footnote={formatsFootnote} trackName="formats" />}
-      {content.availability && <AvailabilitySection content={content.availability} trackName="availability" />}
+      {content.availability && (
+        <AvailabilitySection
+          content={content.availability}
+          // With a form on the page, a date click fills it in instead of leaving the page.
+          formAnchor={content.heroForm ? INQUIRE_ANCHOR : undefined}
+          trackName="availability"
+        />
+      )}
       <FaqSection content={content.faq} trackName="faq" />
       {content.gallery && <GalleryPreview content={content.gallery} trackName="gallery" />}
       <ClosingCta content={content.closingCta} trackName="closing_cta" />

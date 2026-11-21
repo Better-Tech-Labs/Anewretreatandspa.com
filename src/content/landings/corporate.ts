@@ -19,15 +19,29 @@ import type { RoomsContent } from "@/components/home/RoomsGrid";
 import type { SampleDayContent } from "@/components/home/SampleDay";
 import type { SplitFeatureContent } from "@/components/home/SplitFeature";
 import type { StickyBarContent } from "@/components/home/StickyBookingBar";
+import type { HeroFormContent } from "@/components/landing/HeroInquiry";
 import { SPACES_ANCHOR, type LandingContent } from "@/components/landing/LandingPage";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/contact";
-import { inquireHref } from "@/lib/inquire";
+import { HERO_FORM_ANCHOR, inquireHref } from "@/lib/inquire";
 
 /** Must match an entry in EVENT_TYPES so the inquiry form and links accept it. */
 export const EVENT_TYPE = "Corporate Retreat";
 
-/** Every "Inquire" button goes to the inquiry page, with Corporate Retreat already chosen. */
+/** Links further down the page go to the inquiry page, with Corporate Retreat already chosen. */
 const INQUIRE_HREF = inquireHref(EVENT_TYPE);
+/** The page's main Inquire buttons scroll to the form in the hero instead of leaving the page. */
+const HERO_FORM_HREF = `#${HERO_FORM_ANCHOR}`;
+
+/** What a booking includes, in the page's own words. Shown with the price in the hero. */
+const INCLUDED = [
+  "Whole estate, one team",
+  "7 bedrooms",
+  "Event Pavilion",
+  "Studio Cabin",
+  "Private chefs",
+  "Sauna & cold plunge",
+  "Tonal gym",
+];
 
 export const meta = {
   title: "Corporate Retreats near Seattle | Private Estate | ANEW",
@@ -42,26 +56,28 @@ export const hero: HeroContent = {
   titleLines: ["Corporate Retreats", "near Seattle"],
   titleScale: "long",
   subtitle: "A private estate and spa for your team alone. Minutes from the city, a long way from the office.",
-  primaryCta: { label: "Inquire", href: INQUIRE_HREF },
+  // Same rate the homepage and booking page show for a full day.
+  priceNote: "Exclusive use of the estate from $5,500 per day",
+  primaryCta: { label: "Inquire", href: HERO_FORM_HREF },
   secondaryCtas: [
     { label: "See the Spaces", href: `#${SPACES_ANCHOR}` },
     { label: `Call ${PHONE_DISPLAY}`, href: PHONE_HREF },
   ],
 };
 
+export const heroForm: HeroFormContent = {
+  title: "Check Your Dates",
+  eventType: EVENT_TYPE,
+  formLocation: "corporate_hero",
+  includedLabel: "What's included",
+  included: INCLUDED,
+};
+
 export const intro: IntroContent = {
   statement:
     "ANEW is a private 5,800 sq ft estate and spa on two wooded acres. Book it and your team is the only one here, with rooms to meet in, chefs in the kitchen, and a sauna waiting when the agenda ends.",
-  features: [
-    "Whole estate, one team",
-    "7 bedrooms",
-    "Event Pavilion",
-    "Studio Cabin",
-    "Private chefs",
-    "Sauna & cold plunge",
-    "Tonal gym",
-    "Minutes from Seattle",
-  ],
+  // The feature list moved up into the hero, beside the price.
+  features: [],
   inquireLabel: "Tell us about your team",
   inquireType: EVENT_TYPE,
 };
@@ -158,7 +174,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Find Your Dates",
-  hint: "Click an open date to start a booking",
+  hint: "Click an open date to ask about it",
   inquireLead: "Weekdays, multi-day, or dates not showing?",
   inquireType: EVENT_TYPE,
 };
@@ -202,6 +218,7 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About Your Team",
   text: "Takes about 30 seconds. No payment, no commitment. Share rough dates and headcount and we'll come back with options.",
   eventType: EVENT_TYPE,
+  formLocation: "corporate_bottom",
   points: [
     "A personal reply within 24 hours",
     "The whole estate reserved for your team",
@@ -213,13 +230,14 @@ export const stickyBar: StickyBarContent = {
   headline: "Corporate retreats",
   note: "Private estate",
   secondaryCta: { label: "Call", href: PHONE_HREF },
-  cta: { label: "Inquire", href: INQUIRE_HREF },
+  cta: { label: "Inquire", href: HERO_FORM_HREF },
 };
 
 /** The whole page, in the shape the shared landing layout takes. */
 export const corporateLanding: LandingContent = {
   meta,
   hero,
+  heroForm,
   intro,
   pitch: estate,
   band: forestBand,

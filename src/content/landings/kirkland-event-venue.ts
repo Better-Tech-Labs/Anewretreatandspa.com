@@ -179,6 +179,8 @@ export const inquiry: InquirySectionContent = {
   title: "Start with a Date",
   text: "Tell us what you are hosting and when. It is a short form with no deposit and no obligation, and it goes to a person on our team.",
   eventType: "",
+  formLocation: "kirkland_event_venue_bottom",
+  showBookLink: true,
   points: [
     "An answer within 24 hours",
     "One booking on the property at a time",

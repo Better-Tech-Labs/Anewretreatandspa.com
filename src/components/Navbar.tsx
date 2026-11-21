@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { ChevronDown, Menu, X, User, Phone } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { homeHrefFor } from "@/lib/audience";
+import { HERO_FORM_ANCHOR } from "@/lib/inquire";
 import OccasionsMenu from "@/components/OccasionsMenu";
 import { LANDING_PATHS, OCCASION_LINKS } from "@/lib/landingPages";
 import { useAudience } from "@/lib/useAudience";
@@ -32,6 +33,17 @@ const rightNavLinks = [
 
 const navLinks = [...leftNavLinks, ...rightNavLinks];
 
+interface HeaderCta {
+  label: string;
+  href: string;
+}
+
+const BOOK_CTA: HeaderCta = { label: "Book Now", href: "/booking" };
+/** Pages whose one action is the inquiry form in their hero: the header button points there too. */
+const HEADER_CTA_BY_PATH: Record<string, HeaderCta> = {
+  "/corporate-retreats": { label: "Inquire", href: `#${HERO_FORM_ANCHOR}` },
+};
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -56,6 +68,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const audience = useAudience();
   const homeHref = homeHrefFor(audience);
+  const headerCta = HEADER_CTA_BY_PATH[pathname] ?? BOOK_CTA;
 
   // Pages with dark hero images where white nav text works
   const darkHeroPages = ["/", "/venue", "/experiences", "/gallery", "/packages", "/boutique", "/booking", ...LANDING_PATHS];
@@ -138,7 +151,7 @@ export default function Navbar() {
 
             <div className="flex items-center gap-2 xl:gap-3 ml-auto mr-4">
               <Link
-                href="/booking"
+                href={headerCta.href}
                 prefetch={false}
                 className={`whitespace-nowrap text-[11px] tracking-[0.25em] uppercase font-light border px-4 xl:px-5 py-2.5 transition-all duration-300 ${
                   useDarkText
@@ -146,7 +159,7 @@ export default function Navbar() {
                     : "border-white text-white hover:bg-white hover:text-dark"
                 }`}
               >
-                Book Now
+                {headerCta.label}
               </Link>
               <a
                 href="tel:+12064711243"
@@ -233,8 +246,8 @@ export default function Navbar() {
             ) : (
               <button onClick={() => { setMobileOpen(false); openAuth(); }} className="text-white text-[13px] tracking-[0.3em] uppercase font-light hover:text-accent transition-colors">Sign In</button>
             )}
-            <Link href="/booking" prefetch={false} onClick={() => setMobileOpen(false)} className="text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
-              Book Now
+            <Link href={headerCta.href} prefetch={false} onClick={() => setMobileOpen(false)} className="text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
+              {headerCta.label}
             </Link>
             <a href="tel:+12064711243" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-[13px] tracking-[0.3em] uppercase font-light border border-white text-white px-8 py-3 hover:bg-white hover:text-dark transition-all">
               <Phone className="w-4 h-4" />

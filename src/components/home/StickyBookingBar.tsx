@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import InquireLink from "@/components/InquireLink";
+import { INQUIRY_FORM_ATTR } from "@/components/inquiry/InquiryForm";
 import { prefetchFor } from "@/lib/links";
 import type { CtaLink } from "./types";
 
@@ -22,10 +23,18 @@ const REVEAL_AFTER_PX = 600;
 /** It slides away again near the end of the page, so it never sits on top of the footer's links. */
 const HIDE_BEFORE_END_PX = 240;
 
+/** True while any part of an inquiry form is on screen: the bar would sit on its fields or its Send button. */
+function isInquiryFormOnScreen(): boolean {
+  return Array.from(document.querySelectorAll(`[${INQUIRY_FORM_ATTR}]`)).some((form) => {
+    const { top, bottom } = form.getBoundingClientRect();
+    return bottom > 0 && top < window.innerHeight;
+  });
+}
+
 function shouldShowBar(): boolean {
   const scrolled = window.scrollY;
   const distanceToEnd = document.documentElement.scrollHeight - (scrolled + window.innerHeight);
-  return scrolled > REVEAL_AFTER_PX && distanceToEnd > HIDE_BEFORE_END_PX;
+  return scrolled > REVEAL_AFTER_PX && distanceToEnd > HIDE_BEFORE_END_PX && !isInquiryFormOnScreen();
 }
 
 /** Mobile-only bar pinned to the bottom of the screen. */
@@ -40,6 +49,8 @@ export default function StickyBookingBar({ content }: { content: StickyBarConten
 
   return (
     <div
+      // Off screen means out of reach too, so a hidden bar can't be tabbed to.
+      inert={!isVisible}
       className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden transition-all duration-500 ${isVisible ? "translate-y-0" : "translate-y-full"}`}
     >
       <div className="bg-dark/95 backdrop-blur-md px-4 min-[390px]:px-6 py-3 flex items-center justify-between gap-3">

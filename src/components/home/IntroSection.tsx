@@ -20,15 +20,17 @@ export default function IntroSection({ content, trackName }: { content: IntroCon
           <h2 className="font-heading text-3xl sm:text-4xl md:text-[2.75rem] leading-[1.35] text-dark mb-10 font-normal">
             {content.statement}
           </h2>
-          <div className="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3 text-[10px] sm:text-[11px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-muted">
-            {content.features.map((feature, i) => (
-              <Fragment key={feature}>
-                {/* Dots only where the list sits on wide rows; on phones they end up dangling at line ends. */}
-                {i > 0 && <span className="hidden sm:inline text-accent">·</span>}
-                <span>{feature}</span>
-              </Fragment>
-            ))}
-          </div>
+          {content.features.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3 text-[10px] sm:text-[11px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-muted">
+              {content.features.map((feature, i) => (
+                <Fragment key={feature}>
+                  {/* Dots only where the list sits on wide rows; on phones they end up dangling at line ends. */}
+                  {i > 0 && <span className="hidden sm:inline text-accent">·</span>}
+                  <span>{feature}</span>
+                </Fragment>
+              ))}
+            </div>
+          )}
           <InquireLink type={content.inquireType} className="mt-10">
             {content.inquireLabel}
           </InquireLink>

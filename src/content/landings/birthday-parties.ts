@@ -161,7 +161,7 @@ export const formats: OccasionsContent = {
 export const availability: AvailabilityContent = {
   eyebrow: "Availability",
   title: "Is the Birthday Weekend Open?",
-  hint: "Click an open date to start a booking",
+  hint: "Click an open date to ask about it",
   inquireLead: "Need a specific date, or planning a surprise?",
   inquireType: EVENT_TYPE,
 };
@@ -205,6 +205,8 @@ export const inquiry: InquirySectionContent = {
   title: "Tell Us About the Birthday",
   text: "Under a minute, and you won't be asked to pay anything. Let us know the date you're aiming for and about how many guests, and we'll send back ideas and a quote.",
   eventType: EVENT_TYPE,
+  formLocation: "birthday_parties_bottom",
+  showBookLink: true,
   points: [
     "Hear back within 24 hours",
     "The estate held for your party alone",

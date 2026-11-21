@@ -32,12 +32,21 @@ function eventTypeFor(el: Element, path: string): EventType {
   return isEventType(declared) ? declared : eventTypeForPath(path);
 }
 
-function isBookingLink(anchor: HTMLAnchorElement): boolean {
+const BOOKING_PATH = "/booking";
+/** Where a click leads, so cta_click can be grouped without reading URLs. */
+type CtaDestination = "inquire" | "booking" | "on_page" | "external" | "internal";
+
+function destinationFor(href: string): CtaDestination {
+  if (href.startsWith("#")) return href.startsWith("#inquire") ? "inquire" : "on_page";
   try {
-    const url = new URL(anchor.href, window.location.origin);
-    return url.origin === window.location.origin && url.pathname.replace(/\/$/, "") === "/booking";
+    const url = new URL(href, window.location.origin);
+    if (url.origin !== window.location.origin) return "external";
+    const path = url.pathname.replace(/\/$/, "");
+    if (path === "/inquire") return "inquire";
+    if (path === BOOKING_PATH) return "booking";
+    return "internal";
   } catch {
-    return false;
+    return "internal";
   }
 }
 
@@ -63,10 +72,8 @@ function handleClick(event: MouseEvent): void {
     return;
   }
 
-  track("cta_click", { ...base, link_url: href });
-  if (el instanceof HTMLAnchorElement && isBookingLink(el)) {
-    track("booking_start", base);
-  }
+  // The query string is dropped: it can carry a date the visitor picked.
+  track("cta_click", { ...base, link_url: href.split("?")[0], cta_destination: href ? destinationFor(href) : "on_page" });
 }
 
 function useClickTracking(): void {
@@ -74,6 +81,42 @@ function useClickTracking(): void {
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
   }, []);
+}
+
+/**
+ * booking_start: the visitor did something on the booking page (picked a date,
+ * chose a duration, typed in a field). Once per page view. Opening the page,
+ * or clicking a link to it, is not a start.
+ */
+function useBookingStart(pathname: string): void {
+  useEffect(() => {
+    if (pathname.replace(/\/$/, "") !== BOOKING_PATH) return;
+    const main = document.querySelector("main");
+    if (!main) return;
+    let sent = false;
+
+    const stop = () => {
+      main.removeEventListener("input", onInput, true);
+      main.removeEventListener("click", onClick, true);
+    };
+    const start = (startAction: string) => {
+      if (sent) return;
+      sent = true;
+      stop();
+      track("booking_start", { start_action: startAction });
+    };
+    const onInput = () => start("field_input");
+    const onClick = (event: Event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      // Buttons that aren't links: calendar days, duration blocks, Continue.
+      const button = target?.closest<HTMLButtonElement>("button");
+      if (button && !button.disabled && !button.closest("header, nav, footer")) start("button_click");
+    };
+
+    main.addEventListener("input", onInput, true);
+    main.addEventListener("click", onClick, true);
+    return stop;
+  }, [pathname]);
 }
 
 function useScrollDepth(pathname: string): void {
@@ -157,6 +200,7 @@ function useSectionViews(pathname: string): void {
 export default function AnalyticsListeners() {
   const pathname = usePathname();
   useClickTracking();
+  useBookingStart(pathname);
   useScrollDepth(pathname);
   useSectionViews(pathname);
   return null;

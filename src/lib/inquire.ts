@@ -1,7 +1,12 @@
 import { EVENT_TYPES } from "./booking.ts";
 
 export const INQUIRE_PATH = "/inquire";
+/** Anchor of the inquiry form inside a landing page hero. Header, hero and sticky-bar buttons scroll here. */
+export const HERO_FORM_ANCHOR = "inquire-top";
+/** YYYY-MM-DD. */
+const DATE_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 const TYPE_PARAM = "type";
+const DATE_PARAM = "date";
 
 /** The EVENT_TYPES entry matching `value` (case-insensitive), or "" if none does. */
 function matchEventType(value: string | null | undefined): string {
@@ -11,18 +16,28 @@ function matchEventType(value: string | null | undefined): string {
 }
 
 /**
- * Link to the inquiry form, pre-selecting `type` when it is a real event type.
- * An unknown type falls back to the plain form rather than a broken prefill.
+ * Link to the inquiry form, pre-selecting `type` when it is a real event type
+ * and pre-filling `date` (YYYY-MM-DD) when it is well formed.
+ * An unknown type or a malformed date is dropped rather than linked as a broken prefill.
  */
-export function inquireHref(type?: string): string {
+export function inquireHref(type?: string, date?: string): string {
+  const params = new URLSearchParams();
   const known = matchEventType(type);
-  if (!known) return INQUIRE_PATH;
-  return `${INQUIRE_PATH}?${new URLSearchParams({ [TYPE_PARAM]: known })}`;
+  if (known) params.set(TYPE_PARAM, known);
+  if (date && DATE_SHAPE.test(date)) params.set(DATE_PARAM, date);
+  const query = params.toString();
+  return query ? `${INQUIRE_PATH}?${query}` : INQUIRE_PATH;
 }
 
 /** Reads ?type= from a location.search string. Only exact event types are accepted. */
 export function eventTypeFromQuery(search: string): string {
   return matchEventType(new URLSearchParams(search).get(TYPE_PARAM));
+}
+
+/** Reads ?date= from a location.search string. "" unless it is a date the form would accept. */
+export function dateFromQuery(search: string, now: Date): string {
+  const value = new URLSearchParams(search).get(DATE_PARAM) ?? "";
+  return dateError(value, now) ? "" : value;
 }
 
 // ----------------------------------------------------------------------------
@@ -41,7 +56,7 @@ export type InquiryErrors = Partial<Record<keyof InquiryFields, string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[\d\s+()\-.]{7,30}$/;
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const DATE_PATTERN = DATE_SHAPE;
 /** The server accepts dates up to 3×365 days out; stop a day short for timezone slack. */
 const MAX_DAYS_AHEAD = 3 * 365 - 1;
 
